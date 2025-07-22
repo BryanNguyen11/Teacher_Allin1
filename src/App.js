@@ -1,23 +1,189 @@
-import logo from './logo.svg';
+
+
+import React, { useState, useRef, useEffect } from 'react';
+import Table from './components/Table';
+import Sidebar from './components/Sidebar';
 import './App.css';
 
+
 function App() {
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [tableData, setTableData] = useState(null);
+  const fileInputRef = useRef();
+  const [showUpload, setShowUpload] = useState(false);
+  const [password, setPassword] = useState('');
+  const [uploadError, setUploadError] = useState('');
+  const [uploadSuccess, setUploadSuccess] = useState('');
+
+  async function handleCSVUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async function(event) {
+      const text = event.target.result;
+      const lines = text.split(/\r?\n/).filter(Boolean);
+      if (lines.length < 2) {
+        setUploadError('File không hợp lệ!');
+        setUploadSuccess('');
+        return;
+      }
+      const headers = lines[0].split(',').map(h => h.trim());
+      const rows = lines.slice(1).map(line => {
+        const values = line.split(',');
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = values[i] || '');
+        return obj;
+      });
+      // Gửi lên backend
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('rows', JSON.stringify(rows));
+      try {
+        const res = await fetch('http://localhost:5000/api/csv/upload', {
+          method: 'POST',
+          body: formData
+        });
+        if (!res.ok) throw new Error('Lỗi upload lên server');
+        setUploadSuccess('Tải lên file thành công!');
+        setUploadError('');
+        setShowUpload(false);
+        setPassword('');
+        setTimeout(() => setUploadSuccess(''), 3000);
+        // Sau khi upload thành công, fetch lại dữ liệu mới nhất
+        fetchLatestCsv();
+      } catch (err) {
+        setUploadError('Lỗi upload lên server!');
+        setUploadSuccess('');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Hàm lấy dữ liệu csv mới nhất từ backend
+  async function fetchLatestCsv() {
+    try {
+      const res = await fetch('http://localhost:5000/api/csv/files');
+      if (!res.ok) throw new Error('Lỗi lấy dữ liệu từ server');
+      const files = await res.json();
+      console.log('Kết quả fetch từ backend:', files);
+      if (Array.isArray(files) && files.length > 0) {
+        // Nếu files[0].data là mảng lồng mảng, lấy phần tử đầu tiên
+        let tableRows = files[0].data;
+        if (Array.isArray(tableRows) && tableRows.length === 1 && Array.isArray(tableRows[0])) {
+          tableRows = tableRows[0];
+        }
+        console.log('Dữ liệu truyền vào Table:', tableRows);
+        setTableData(tableRows);
+      }
+    } catch (err) {
+      setUploadError('Không thể lấy dữ liệu từ server!');
+    }
+  }
+
+  // Lấy dữ liệu khi load trang
+  useEffect(() => {
+    fetchLatestCsv();
+    // eslint-disable-next-line
+  }, []);
+
+  // Compute columns that have at least one '3T' (except excluded columns) to highlight
+  let highlightCols = [];
+  if (
+    tableData &&
+    Array.isArray(tableData) &&
+    tableData.length > 0 &&
+    tableData.some(row => Object.values(row).some(v => v && v.trim && v.trim() !== ''))
+  ) {
+    const headers = Object.keys(tableData[0]);
+    const excludedCols = ['Điểm trung bình chuyên môn'];
+    highlightCols = headers.filter(col => {
+      if (excludedCols.includes(col.trim())) return false;
+      return tableData.some(row => typeof row[col] === 'string' && row[col].trim() === '3T');
+    });
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {showSidebar && <Sidebar />}
+      <div
+        className="main-content"
+        style={{
+          marginLeft: showSidebar ? 220 : 0,
+          transition: 'margin-left 0.3s',
+          width: '100%'
+        }}
+      >
+        <header className="glass-header" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative'}}>
+          <button
+            onClick={() => setShowSidebar(v => !v)}
+            style={{
+              position: 'absolute',
+              left: 24,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'linear-gradient(90deg, #e0e7ef 0%, #f8fafc 100%)',
+              border: '1.5px solid #e0e0e0',
+              borderRadius: 8,
+              padding: '8px 16px',
+              fontWeight: 700,
+              fontSize: 16,
+              color: '#222',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px 0 rgba(80,80,80,0.06)',
+              zIndex: 20,
+              transition: 'background 0.2s'
+            }}
+            aria-label={showSidebar ? '<' : '>'}
+          >{showSidebar ? '<' : '>'}</button>
+          <h1 style={{width: '100%', textAlign: 'center'}}>Teacher AI1</h1>
+          <button
+            onClick={() => setShowUpload(v => !v)}
+            style={{
+              position: 'absolute',
+              right: 24,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'linear-gradient(90deg, #e0e7ef 0%, #f8fafc 100%)',
+              border: '1.5px solid #e0e0e0',
+              borderRadius: 8,
+              padding: '8px 16px',
+              fontWeight: 700,
+              fontSize: 16,
+              color: '#222',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px 0 rgba(80,80,80,0.06)',
+              zIndex: 20,
+              transition: 'background 0.2s'
+            }}
+          >Tải lên CSV</button>
+        </header>
+        {showUpload && (
+          <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:12, margin:'16px 0'}}>
+            <input
+              type="password"
+              placeholder="Nhập mật khẩu để tải lên"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              style={{padding:'8px 16px', borderRadius:8, border:'1.5px solid #e0e0e0', fontSize:16, minWidth:220}}
+            />
+            <input
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              style={{display:'block'}}
+              disabled={password !== '191103'}
+              onChange={handleCSVUpload}
+            />
+            {password !== '191103' && <span style={{color:'#b00', fontWeight:600}}>Nhập đúng mật khẩu để tải lên!</span>}
+            {uploadError && <span style={{color:'#b00', fontWeight:600}}>{uploadError}</span>}
+            {uploadSuccess && <span style={{color:'#0a0', fontWeight:600}}>{uploadSuccess}</span>}
+          </div>
+        )}
+        <main>
+          <h2 style={{marginTop: 32, marginBottom: 24, color: '#222', textAlign: 'center', letterSpacing: 1, fontWeight: 700, textShadow: '0 2px 8px #e0e7ef'}}>Bảng Chỉ Số Giáo Viên</h2>
+          <Table data={tableData} highlightCols={highlightCols} />
+        </main>
+      </div>
     </div>
   );
 }
