@@ -1,9 +1,13 @@
 
 
+
 import React, { useState, useRef, useEffect } from 'react';
 import Table from './components/Table';
 import Sidebar from './components/Sidebar';
 import './App.css';
+
+// Sử dụng biến môi trường REACT_APP_API_BASE, fallback về render nếu không có
+const API_BASE = process.env.REACT_APP_API_BASE || 'https://teacher-allin1.onrender.com';
 
 
 function App() {
@@ -39,7 +43,7 @@ function App() {
       formData.append('file', file);
       formData.append('rows', JSON.stringify(rows));
       try {
-        const res = await fetch('http://localhost:5000/api/csv/upload', {
+      const res = await fetch(`${API_BASE}/api/csv/upload`, {
           method: 'POST',
           body: formData
         });
@@ -62,7 +66,7 @@ function App() {
   // Hàm lấy dữ liệu csv mới nhất từ backend
   async function fetchLatestCsv() {
     try {
-      const res = await fetch('http://localhost:5000/api/csv/files');
+      const res = await fetch(`${API_BASE}/api/csv/files`);
       if (!res.ok) throw new Error('Lỗi lấy dữ liệu từ server');
       const files = await res.json();
       console.log('Kết quả fetch từ backend:', files);
