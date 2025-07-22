@@ -1,3 +1,4 @@
+
 .responsive-table-container {
   width: 100%;
   overflow-x: auto;
@@ -10,6 +11,15 @@
   border: 1.5px solid rgba(255,255,255,0.18);
 }
 
+.responsive-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.97rem;
+  background: rgba(255,255,255,0.55);
+  border-radius: 18px;
+  overflow: hidden;
+  min-width: 700px;
+}
 .responsive-table {
   width: 100%;
   border-collapse: collapse;
@@ -39,21 +49,36 @@
   transition: background 0.2s;
 }
 
+
 @media (max-width: 900px) {
+  .responsive-table {
+    min-width: 600px;
+  }
   .responsive-table th, .responsive-table td {
     font-size: 0.85rem;
     padding: 6px 8px;
     min-width: 80px;
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
 @media (max-width: 600px) {
+  .responsive-table {
+    min-width: 480px;
+  }
   .responsive-table th, .responsive-table td {
-    font-size: 0.8rem;
-    padding: 4px 6px;
+    font-size: 0.78rem;
+    padding: 3px 4px;
     min-width: 60px;
+    max-width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .responsive-table-container {
-    margin: 10px 0;
+    margin: 8px 0;
   }
 }
