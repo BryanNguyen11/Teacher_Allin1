@@ -53,7 +53,7 @@ const Table = ({ data = [] }) => {
           ) : (
             filteredRows.map((row, idx) => (
               <tr key={idx}>
-                {columns.map(col => <td key={col}>{row[col]}</td>)}
+                {columns.map(col => <td key={col}>{col === 'Rank' ? '' : row[col]}</td>)}
               </tr>
             ))
           )}
