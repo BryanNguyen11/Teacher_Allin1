@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './Table.css';
 
 const columns = [
-  'Full name', 'Code', 'User name', 'Rank', 'Khối', 'Status', 'Role', 'CR45', '15%', 'TP', '20%', 'Completion rate', '20%', 'Chỉ số chậm/ không hoàn thành DL', '20%', 'Điểm trung bình chuyên môn', '25%', 'Technical', 'Trial', 'Sư phạm', 'Điểm đánh giá (Max = 5)', 'Xếp loại', 'Đánh giá'
+  'Full name', 'Code', 'User name', /*'Rank',*/ 'Khối', 'Status', 'Role', 'CR45', '15%', 'TP', '20%', 'Completion rate', '20%', 'Chỉ số chậm/ không hoàn thành DL', '20%', 'Điểm trung bình chuyên môn', '25%', 'Technical', 'Trial', 'Sư phạm', 'Điểm đánh giá (Max = 5)', 'Xếp loại', 'Đánh giá'
 ];
 
 const Table = ({ data = [] }) => {
