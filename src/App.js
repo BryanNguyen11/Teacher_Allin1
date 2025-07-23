@@ -107,59 +107,51 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App" style={{background:'#fff', minHeight:'100vh', display:'flex'}}>
       {showSidebar && <Sidebar />}
       <div
         className="main-content"
         style={{
-          marginLeft: showSidebar ? 220 : 0,
+          marginLeft: showSidebar ? 180 : 0,
           transition: 'margin-left 0.3s',
           width: '100%'
         }}
       >
-        <header className="glass-header" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative'}}>
-          <button
-            onClick={() => setShowSidebar(v => !v)}
-            style={{
-              position: 'absolute',
-              left: 24,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              background: 'linear-gradient(90deg, #e0e7ef 0%, #f8fafc 100%)',
-              border: '1.5px solid #e0e0e0',
-              borderRadius: 8,
-              padding: '8px 16px',
-              fontWeight: 700,
-              fontSize: 16,
-              color: '#222',
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px 0 rgba(80,80,80,0.06)',
-              zIndex: 20,
-              transition: 'background 0.2s'
-            }}
-            aria-label={showSidebar ? '<' : '>'}
-          >{showSidebar ? '<' : '>'}</button>
-          <h1 style={{width: '100%', textAlign: 'center'}}>Teacher AI1</h1>
-          <button
-            onClick={() => setShowUpload(v => !v)}
-            style={{
-              position: 'absolute',
-              right: 24,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              background: 'linear-gradient(90deg, #e0e7ef 0%, #f8fafc 100%)',
-              border: '1.5px solid #e0e0e0',
-              borderRadius: 8,
-              padding: '8px 16px',
-              fontWeight: 700,
-              fontSize: 16,
-              color: '#222',
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px 0 rgba(80,80,80,0.06)',
-              zIndex: 20,
-              transition: 'background 0.2s'
-            }}
-          >Tải lên CSV</button>
+        <header className="modern-header" style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          background: '#fff',
+          boxShadow: '0 2px 16px 0 rgba(80,80,80,0.08)',
+          padding: '0 32px',
+          minHeight: 64,
+          borderBottom: '1.5px solid #e0e0e0',
+          position: 'sticky',
+          top: 0,
+          zIndex: 10
+        }}>
+          <div style={{display:'flex', alignItems:'center', gap:12}}>
+            <button
+              onClick={() => setShowSidebar(v => !v)}
+              style={{
+                background: '#f5f6fa',
+                border: 'none',
+                borderRadius: 8,
+                padding: 8,
+                fontWeight: 700,
+                fontSize: 20,
+                color: '#222',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px 0 rgba(80,80,80,0.06)',
+                transition: 'background 0.2s',
+                marginRight: 8
+              }}
+              aria-label={showSidebar ? 'Ẩn menu' : 'Hiện menu'}
+            >
+              <span style={{fontSize:24, fontWeight:900}}>{showSidebar ? '☰' : '☰'}</span>
+            </button>
+            <img src="/favicon.ico" alt="logo" style={{width:36, height:36, borderRadius:8, boxShadow:'0 2px 8px #e0e0e0'}} />
+            <span style={{fontWeight:800, fontSize: '1.45rem', color:'#222', letterSpacing:1}}>Teacher AI1</span>
+          </div>
+          
         </header>
         {showUpload && (
           <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:12, margin:'16px 0'}}>

@@ -56,6 +56,24 @@ const Table = ({ data, highlightCols = [] }) => {
   const [query, setQuery] = useState('');
   const [shimmerPos, setShimmerPos] = useState(0);
   const [popAnim, setPopAnim] = useState(false);
+  // Hook để lưu kích thước màn hình
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  
+  // Theo dõi sự thay đổi kích thước màn hình
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
+  // Xác định nếu đang ở mobile view
+  const isMobile = windowWidth < 576;
+  const isTablet = windowWidth >= 576 && windowWidth < 992;
+  
   const tableData = Array.isArray(data) && data.length > 0 ? data : defaultData;
   const filtered = query.trim()
     ? tableData.filter(row => row['Code'] && row['Code'].toLowerCase() === query.trim().toLowerCase())
@@ -109,9 +127,37 @@ const Table = ({ data, highlightCols = [] }) => {
     'T19': '14',
     'T20': '15'
   };
+  // State for upload
+  const [showUpload, setShowUpload] = useState(false);
+  const [password, setPassword] = useState('');
+  const [uploadError, setUploadError] = useState('');
+  const [uploadSuccess, setUploadSuccess] = useState('');
+  const fileInputRef = React.useRef();
+
+  // Dummy upload handler (replace with real if needed)
+  const handleCSVUpload = e => {
+    // ...implement upload logic or call parent handler
+    setUploadSuccess('Tải lên thành công!');
+    setTimeout(() => setUploadSuccess(''), 2000);
+  };
+
   return (
-    <div>
-      <div style={{display: 'flex', justifyContent: 'flex-end', marginBottom: 16, gap: 8}}>
+    <div style={{ background: '#fff', minHeight: '100vh', padding: 0, margin: 0 }}>
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        marginBottom: 16,
+        gap: 8,
+        boxShadow: '0 2px 16px 0 rgba(80,80,80,0.10)',
+        background: '#fff',
+        borderRadius: 12,
+        padding: 16,
+        maxWidth: 600,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}>
         <input
           type="text"
           placeholder="Nhập Mã LMS của bạn"
@@ -123,16 +169,16 @@ const Table = ({ data, highlightCols = [] }) => {
             borderRadius: 10,
             border: filtered.length === 0 && query.trim() ? '2px solid #444' : '2px solid #e0e0e0',
             fontSize: 17,
-            minWidth: 240,
+            minWidth: 120,
+            flex: 1,
             outline: 'none',
-            boxShadow: filtered.length === 0 && query.trim()
-              ? '0 2px 12px 0 rgba(80,80,80,0.10)'
-              : '0 2px 12px 0 rgba(0,0,0,0.06)',
+            boxShadow: '0 2px 12px 0 rgba(80,80,80,0.10)',
             background: '#fff',
             color: '#222',
             fontWeight: 500,
             transition: 'all 0.2s',
             borderColor: filtered.length === 0 && query.trim() ? '#444' : '#e0e0e0',
+            maxWidth: 220
           }}
         />
         <button
@@ -153,10 +199,8 @@ const Table = ({ data, highlightCols = [] }) => {
             position: 'relative',
             overflow: 'hidden',
             userSelect: 'none',
-            ...(search && {
-              background: 'linear-gradient(90deg,#e53935 60%,#b71c1c 100%)',
-              boxShadow: '0 4px 16px 0 #e5393533',
-            })
+            background: search ? 'linear-gradient(90deg,#e53935 60%,#b71c1c 100%)' : '#e53935',
+            boxShadow: search ? '0 4px 16px 0 #e5393533' : '0 2px 8px 0 rgba(229,57,53,0.12)',
           }}
           onMouseDown={e => {
             e.currentTarget.style.transform = 'scale(0.96)';
@@ -184,9 +228,62 @@ const Table = ({ data, highlightCols = [] }) => {
             e.currentTarget.style.boxShadow = '0 4px 16px 0 #e5393533';
           }}
         >Tìm kiếm</button>
+        <button
+          onClick={() => setShowUpload(v => !v)}
+          style={{
+            padding: '10px 20px',
+            borderRadius: 10,
+            border: 'none',
+            background: '#1976d2',
+            color: '#fff',
+            fontWeight: 700,
+            fontSize: 16,
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px 0 rgba(25,118,210,0.12)',
+            transition: 'all 0.18s cubic-bezier(.4,1.6,.6,1)',
+            marginLeft: 4,
+            outline: 'none',
+            position: 'relative',
+            overflow: 'hidden',
+            userSelect: 'none',
+          }}
+        >Tải lên CSV</button>
       </div>
+      {showUpload && (
+        <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:12, margin:'16px 0'}}>
+          <input
+            type="password"
+            placeholder="Nhập mật khẩu để tải lên"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            style={{padding:'8px 16px', borderRadius:8, border:'1.5px solid #e0e0e0', fontSize:16, minWidth:220}}
+          />
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            style={{display:'block'}}
+            disabled={password !== '191103'}
+            onChange={handleCSVUpload}
+          />
+          {password !== '191103' && <span style={{color:'#b00', fontWeight:600}}>Nhập đúng mật khẩu để tải lên!</span>}
+          {uploadError && <span style={{color:'#b00', fontWeight:600}}>{uploadError}</span>}
+          {uploadSuccess && <span style={{color:'#0a0', fontWeight:600}}>{uploadSuccess}</span>}
+        </div>
+      )}
       {filtered.length === 0 ? (
-        <div style={{textAlign: 'center', color: '#444', fontWeight:700, background:'#f8f8f8', letterSpacing:0.5, padding: 32, borderRadius: 12, margin: '0 auto', maxWidth: 400}}>
+        <div style={{
+          textAlign: 'center',
+          color: '#444',
+          fontWeight: 700,
+          background: '#fff',
+          letterSpacing: 0.5,
+          padding: 32,
+          borderRadius: 12,
+          margin: '0 auto',
+          maxWidth: 400,
+          boxShadow: '0 2px 16px 0 rgba(80,80,80,0.10)',
+        }}>
           Không tìm thấy giáo viên với CODE này.
         </div>
       ) : (
@@ -224,7 +321,7 @@ const Table = ({ data, highlightCols = [] }) => {
                 borderRadius: 18,
                 WebkitBorderRadius: 18,
                 borderImageSlice: 1,
-                boxShadow,
+                boxShadow: '0 4px 24px 0 #b0b0b055, 0 1.5px 8px 0 #b0e0ff33, 0 2px 16px 0 rgba(80,80,80,0.10)',
                 margin: '0 auto 24px',
                 maxWidth: 480,
                 padding: 24,

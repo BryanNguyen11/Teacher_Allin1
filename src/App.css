@@ -1,28 +1,6 @@
 
 
 
-.App {
-  min-height: 100vh;
-  display: flex;
-  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 40%, #e0e7ef 60%, #f3f8ff 100%);
-  background-attachment: fixed;
-
-
-  margin: 0;
-  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
-  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 40%, #e0e7ef 60%, #f3f8ff 100%);
-  background-attachment: fixed;
-
-
-.main-content {
-  flex: 1;
-  margin-left: 220px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: transparent;
-}
-
 
 .glass-header {
   width: 100%;
@@ -40,56 +18,56 @@
   z-index: 10;
   border-radius: 0 0 24px 24px;
 }
-.glass-header h1 {
-  color: #222;
-  font-size: 2.5rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin: 0;
-  text-shadow: 0 2px 8px #e0e7ef;
-}
+
 
 .App {
   min-height: 100vh;
   display: flex;
-  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 40%, #e0e7ef 60%, #f3f8ff 100%);
-  background-attachment: fixed;
-}
-
-body {
+  background: #fff;
   margin: 0;
   font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
-  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 40%, #e0e7ef 60%, #f3f8ff 100%);
-  background-attachment: fixed;
-}
-  .main-content {
-    margin-left: 60px;
-  }
 }
 
-.glass-header {
+
+.main-content {
+  flex: 1;
+  margin-left: 72px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.modern-header {
   width: 100%;
-  padding: 32px 0 16px 0;
-  background: rgba(255,255,255,0.25);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1.5px solid rgba(255,255,255,0.18);
+  background: #fff;
+  box-shadow: 0 2px 16px 0 rgba(80,80,80,0.08);
+  border-bottom: 1.5px solid #e0e0e0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: 10;
+  min-height: 64px;
+  padding: 0 32px;
 }
-.glass-header h1 {
-  color: #2d3a4a;
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  margin: 0;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.04);
+
+.modern-header img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #e0e0e0;
 }
+
+.modern-header span {
+  font-weight: 800;
+  font-size: 1.45rem;
+  color: #222;
+  letter-spacing: 1px;
+}
+
+
 
 main {
   max-width: 1200px;
