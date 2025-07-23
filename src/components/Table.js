@@ -3,7 +3,7 @@ import '../Table.css';
 
 // Make columns unique for React keys
 const rawColumns = [
-  'Full name', 'Mã LMS' , 'Khối', 'Status', 'Role', 'CR45',  'TP',  'Completion rate',  'Chỉ số chậm/ không hoàn thành DL', 'Điểm trung bình chuyên môn', 'Technical', 'Trial', 'Sư phạm', 'Điểm đánh giá (Max = 5)', 'Xếp loại', 'Đánh giá'
+  'Full name', 'Mã LMS' , 'Khối', 'Status', 'Role', 'CR45',  'TP',  'Completion rate',  'Chỉ số chậm/ không hoàn thành DL', 'Điểm trung bình chuyên môn', 'Technical', 'Trial', 'Sư phạm', 'Điểm đánh giá (Max = 5)', 'Xếp loại', 'Đánh giá', 'Mức Handle'
 ];
 const columns = (() => {
   const count = {};
@@ -85,6 +85,30 @@ const Table = ({ data, highlightCols = [] }) => {
     }
   }, [query]);
 
+  // Bảng mapping Rank -> Mức Handle
+  const handleByRank = {
+    'T0': '1 - 5',
+    'T1': '6',
+    'T2': '7',
+    'T3': '8',
+    'T4': '9',
+    'T5': '9',
+    'T6': '10',
+    'T7': '10',
+    'T8': '10',
+    'T9': '10',
+    'T10': '10',
+    'T11': '11',
+    'T12': '11',
+    'T13': '11',
+    'T14': '12',
+    'T15': '12',
+    'T16': '13',
+    'T17': '13',
+    'T18': '14',
+    'T19': '14',
+    'T20': '15'
+  };
   return (
     <div>
       <div style={{display: 'flex', justifyContent: 'flex-end', marginBottom: 16, gap: 8}}>
@@ -233,6 +257,11 @@ const Table = ({ data, highlightCols = [] }) => {
                 // Map dữ liệu 'Mã LMS' sang 'Code' nếu cần
                 let value = row[col];
                 if (col === 'Mã LMS' && !value && row['Code']) value = row['Code'];
+                // Thêm trường Mức Handle dựa vào Rank
+                if (col === 'Mức Handle') {
+                  const rankVal = (row['Rank'] || '').toUpperCase();
+                  value = handleByRank[rankVal] || '';
+                }
                 const is3T = value && typeof value === 'string' && value.trim() === '3T' && highlightCols.includes(col);
                 // Badge style cho Status, Role
                 const isBadge = col === 'Status' || col === 'Role';
