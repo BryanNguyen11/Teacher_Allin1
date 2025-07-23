@@ -229,40 +229,50 @@ const Table = ({ data, highlightCols = [] }) => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: 8,
-                    background: is3T ? '#ffd6d6' : undefined,
-                    border: is3T ? '2px solid #d00' : undefined,
-                    borderRadius: 8,
+                    background: is3T ? 'linear-gradient(90deg,#ff5858 0%,#ffb347 100%)' : undefined,
+                    border: is3T ? '3px solid #d00' : undefined,
+                    borderRadius: 10,
                     padding: '8px 0',
                     fontSize: 16,
                     margin: '0 0 2px 0',
+                    boxShadow: is3T ? '0 0 12px 2px #ff5858cc, 0 0 32px 4px #ffb34788' : undefined,
+                    position: 'relative',
+                    overflow: is3T ? 'visible' : undefined,
+                    zIndex: is3T ? 3 : undefined,
+                    width: is3T ? '105%' : undefined,
+                    marginLeft: is3T ? '-2.5%' : undefined
                   }}>
                     <span style={{
                       minWidth: 120,
-                      color: '#333',
+                      color: is3T ? '#fff' : '#333',
                       fontWeight: 700,
                       letterSpacing: 0.2,
                       textAlign: 'left',
-                      flex: 1
+                      flex: 1,
+                      textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined,
+                      marginLeft: is3T ? 12 : undefined
                     }}>{colKeyMap[colKey]}:</span>
                     <span style={{
-                      color: isBadge ? '#fff' : '#222',
-                      fontWeight: isBadge ? 700 : 500,
+                      color: is3T ? '#fff' : (isBadge ? '#fff' : '#222'),
+                      fontWeight: is3T ? 800 : (isBadge ? 700 : 500),
                       background: isBadge ? (col === 'Status' ? (value === 'Active' ? 'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)' : 'linear-gradient(90deg,#ff5858 0%,#f09819 100%)') : 'linear-gradient(90deg,#667eea 0%,#764ba2 100%)') : undefined,
                       borderRadius: isBadge ? '999px' : undefined,
-                      padding: isBadge ? '2px 12px' : undefined,
+                      padding: is3T ? 0 : (isBadge ? '2px 12px' : undefined),
                       boxShadow: isBadge ? '0 2px 8px 0 rgba(80,80,80,0.10)' : undefined,
                       border: isBadge ? '1.5px solid #eee' : undefined,
                       marginLeft: isBadge ? 8 : undefined,
-                      fontSize: isBadge ? 15 : 16,
+                      marginRight: is3T ? 12 : undefined,
+                      fontSize: is3T ? 16 : (isBadge ? 15 : 16),
                       letterSpacing: isBadge ? 0.5 : undefined,
                       transition: 'all 0.2s',
-                      textAlign: isBadge ? 'center' : 'right',
-                      display: isBadge ? 'inline-block' : 'block',
+                      textAlign: isBadge ? 'center' : (is3T ? 'center' : 'right'),
+                      display: isBadge ? 'inline-block' : (is3T ? 'inline' : 'block'),
                       minWidth: isBadge ? 36 : undefined,
                       maxWidth: isBadge ? 120 : undefined,
                       whiteSpace: isBadge ? 'nowrap' : undefined,
                       position: 'relative',
-                      zIndex: 2
+                      zIndex: 4,
+                      textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined
                     }}>{value}</span>
                   </div>
                 );
