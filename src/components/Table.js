@@ -275,73 +275,172 @@ const Table = ({ data, highlightCols = [] }) => {
                 </span>
               )}
               <div style={{position:'relative', zIndex:2}}>
-              {columns.map(colKey => {
-                const col = colKeyMap[colKey];
-                // Map dữ liệu 'Mã LMS' sang 'Code' nếu cần
-                let value = row[col];
-                if (col === 'Mã LMS' && !value && row['Code']) value = row['Code'];
-                // Thêm trường Mức Handle dựa vào Rank
-                if (col === 'Mức Handle') {
-                  const rankVal = (row['Rank'] || '').toUpperCase();
-                  value = handleByRank[rankVal] || '';
-                }
-                const is3T = value && typeof value === 'string' && value.trim() === '3T' && highlightCols.includes(col);
-                // Badge style cho Status, Role
-                const isBadge = col === 'Status' || col === 'Role';
-                return (
-                  <div key={colKey} style={{
+              {/* Render all fields, but move 'Mức Handle' right after 'Role' */}
+              {(() => {
+                // Find the index of 'Role' in columns
+                const roleIdx = columns.findIndex(colKey => colKeyMap[colKey] === 'Role');
+                // Split columns into beforeRole, afterRole
+                const beforeRole = columns.slice(0, roleIdx + 1);
+                const afterRole = columns.slice(roleIdx + 1).filter(colKey => colKeyMap[colKey] !== 'Mức Handle');
+                // Render fields before and including 'Role'
+                const fields = beforeRole.map(colKey => {
+                  const col = colKeyMap[colKey];
+                  let value = row[col];
+                  if (col === 'Mã LMS' && !value && row['Code']) value = row['Code'];
+                  const is3T = value && typeof value === 'string' && value.trim() === '3T' && highlightCols.includes(col);
+                  const isBadge = col === 'Status' || col === 'Role';
+                  return (
+                    <div key={colKey} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 8,
+                      background: is3T ? 'linear-gradient(90deg,#ff5858 0%,#ffb347 100%)' : undefined,
+                      border: is3T ? '3px solid #d00' : undefined,
+                      borderRadius: 10,
+                      padding: '8px 0',
+                      fontSize: 16,
+                      margin: '0 0 2px 0',
+                      boxShadow: undefined,
+                      position: 'relative',
+                      overflow: is3T ? 'visible' : undefined,
+                      zIndex: is3T ? 3 : undefined,
+                      width: is3T ? '105%' : undefined,
+                      marginLeft: is3T ? '-2.5%' : undefined
+                    }}>
+                      <span style={{
+                        minWidth: 120,
+                        color: is3T ? '#fff' : '#333',
+                        fontWeight: 700,
+                        letterSpacing: 0.2,
+                        textAlign: 'left',
+                        flex: 1,
+                        textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined,
+                        marginLeft: is3T ? 12 : undefined
+                      }}>{colKeyMap[colKey]}:</span>
+                      <span style={{
+                        color: is3T ? '#fff' : (isBadge ? '#fff' : '#222'),
+                        fontWeight: is3T ? 800 : (isBadge ? 700 : 500),
+                        background: isBadge ? (col === 'Status' ? (value === 'Active' ? 'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)' : 'linear-gradient(90deg,#ff5858 0%,#f09819 100%)') : 'linear-gradient(90deg,#667eea 0%,#764ba2 100%)') : undefined,
+                        borderRadius: isBadge ? '999px' : undefined,
+                        padding: is3T ? 0 : (isBadge ? '2px 12px' : undefined),
+                        boxShadow: isBadge ? '0 2px 8px 0 rgba(80,80,80,0.10)' : undefined,
+                        border: isBadge ? '1.5px solid #eee' : undefined,
+                        marginLeft: isBadge ? 8 : undefined,
+                        marginRight: is3T ? 12 : undefined,
+                        fontSize: is3T ? 16 : (isBadge ? 15 : 16),
+                        letterSpacing: isBadge ? 0.5 : undefined,
+                        transition: 'all 0.2s',
+                        textAlign: isBadge ? 'center' : (is3T ? 'center' : 'right'),
+                        display: isBadge ? 'inline-block' : (is3T ? 'inline' : 'block'),
+                        minWidth: isBadge ? 36 : undefined,
+                        maxWidth: isBadge ? 120 : undefined,
+                        whiteSpace: isBadge ? 'nowrap' : undefined,
+                        position: 'relative',
+                        zIndex: 4,
+                        textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined
+                      }}>{value}</span>
+                    </div>
+                  );
+                });
+                // Insert 'Mức Handle' field right after 'Role'
+                const rankVal = (row['Rank'] || '').toUpperCase();
+                const mucHandleValue = handleByRank[rankVal] || '';
+                fields.push(
+                  <div key={'Mức Handle'} style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: 8,
-                    background: is3T ? 'linear-gradient(90deg,#ff5858 0%,#ffb347 100%)' : undefined,
-                    border: is3T ? '3px solid #d00' : undefined,
                     borderRadius: 10,
                     padding: '8px 0',
                     fontSize: 16,
                     margin: '0 0 2px 0',
-                    boxShadow: undefined,
                     position: 'relative',
-                    overflow: is3T ? 'visible' : undefined,
-                    zIndex: is3T ? 3 : undefined,
-                    width: is3T ? '105%' : undefined,
-                    marginLeft: is3T ? '-2.5%' : undefined
+                    zIndex: 3
                   }}>
                     <span style={{
                       minWidth: 120,
-                      color: is3T ? '#fff' : '#333',
+                      color: '#333',
                       fontWeight: 700,
                       letterSpacing: 0.2,
                       textAlign: 'left',
-                      flex: 1,
-                      textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined,
-                      marginLeft: is3T ? 12 : undefined
-                    }}>{colKeyMap[colKey]}:</span>
+                      flex: 1
+                    }}>{'Mức Handle'}:</span>
                     <span style={{
-                      color: is3T ? '#fff' : (isBadge ? '#fff' : '#222'),
-                      fontWeight: is3T ? 800 : (isBadge ? 700 : 500),
-                      background: isBadge ? (col === 'Status' ? (value === 'Active' ? 'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)' : 'linear-gradient(90deg,#ff5858 0%,#f09819 100%)') : 'linear-gradient(90deg,#667eea 0%,#764ba2 100%)') : undefined,
-                      borderRadius: isBadge ? '999px' : undefined,
-                      padding: is3T ? 0 : (isBadge ? '2px 12px' : undefined),
-                      boxShadow: isBadge ? '0 2px 8px 0 rgba(80,80,80,0.10)' : undefined,
-                      border: isBadge ? '1.5px solid #eee' : undefined,
-                      marginLeft: isBadge ? 8 : undefined,
-                      marginRight: is3T ? 12 : undefined,
-                      fontSize: is3T ? 16 : (isBadge ? 15 : 16),
-                      letterSpacing: isBadge ? 0.5 : undefined,
-                      transition: 'all 0.2s',
-                      textAlign: isBadge ? 'center' : (is3T ? 'center' : 'right'),
-                      display: isBadge ? 'inline-block' : (is3T ? 'inline' : 'block'),
-                      minWidth: isBadge ? 36 : undefined,
-                      maxWidth: isBadge ? 120 : undefined,
-                      whiteSpace: isBadge ? 'nowrap' : undefined,
+                      color: '#222',
+                      fontWeight: 500,
+                      fontSize: 16,
+                      textAlign: 'right',
+                      display: 'block',
                       position: 'relative',
-                      zIndex: 4,
-                      textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined
-                    }}>{value}</span>
+                      zIndex: 4
+                    }}>{mucHandleValue}</span>
                   </div>
                 );
-              })}
+                // Render the rest of the fields (excluding 'Mức Handle')
+                afterRole.forEach(colKey => {
+                  const col = colKeyMap[colKey];
+                  let value = row[col];
+                  if (col === 'Mã LMS' && !value && row['Code']) value = row['Code'];
+                  const is3T = value && typeof value === 'string' && value.trim() === '3T' && highlightCols.includes(col);
+                  const isBadge = col === 'Status' || col === 'Role';
+                  fields.push(
+                    <div key={colKey} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 8,
+                      background: is3T ? 'linear-gradient(90deg,#ff5858 0%,#ffb347 100%)' : undefined,
+                      border: is3T ? '3px solid #d00' : undefined,
+                      borderRadius: 10,
+                      padding: '8px 0',
+                      fontSize: 16,
+                      margin: '0 0 2px 0',
+                      boxShadow: undefined,
+                      position: 'relative',
+                      overflow: is3T ? 'visible' : undefined,
+                      zIndex: is3T ? 3 : undefined,
+                      width: is3T ? '105%' : undefined,
+                      marginLeft: is3T ? '-2.5%' : undefined
+                    }}>
+                      <span style={{
+                        minWidth: 120,
+                        color: is3T ? '#fff' : '#333',
+                        fontWeight: 700,
+                        letterSpacing: 0.2,
+                        textAlign: 'left',
+                        flex: 1,
+                        textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined,
+                        marginLeft: is3T ? 12 : undefined
+                      }}>{colKeyMap[colKey]}:</span>
+                      <span style={{
+                        color: is3T ? '#fff' : (isBadge ? '#fff' : '#222'),
+                        fontWeight: is3T ? 800 : (isBadge ? 700 : 500),
+                        background: isBadge ? (col === 'Status' ? (value === 'Active' ? 'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)' : 'linear-gradient(90deg,#ff5858 0%,#f09819 100%)') : 'linear-gradient(90deg,#667eea 0%,#764ba2 100%)') : undefined,
+                        borderRadius: isBadge ? '999px' : undefined,
+                        padding: is3T ? 0 : (isBadge ? '2px 12px' : undefined),
+                        boxShadow: isBadge ? '0 2px 8px 0 rgba(80,80,80,0.10)' : undefined,
+                        border: isBadge ? '1.5px solid #eee' : undefined,
+                        marginLeft: isBadge ? 8 : undefined,
+                        marginRight: is3T ? 12 : undefined,
+                        fontSize: is3T ? 16 : (isBadge ? 15 : 16),
+                        letterSpacing: isBadge ? 0.5 : undefined,
+                        transition: 'all 0.2s',
+                        textAlign: isBadge ? 'center' : (is3T ? 'center' : 'right'),
+                        display: isBadge ? 'inline-block' : (is3T ? 'inline' : 'block'),
+                        minWidth: isBadge ? 36 : undefined,
+                        maxWidth: isBadge ? 120 : undefined,
+                        whiteSpace: isBadge ? 'nowrap' : undefined,
+                        position: 'relative',
+                        zIndex: 4,
+                        textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined
+                      }}>{value}</span>
+                    </div>
+                  );
+                });
+                return fields;
+              })()}
               </div>
             </div>
           );
