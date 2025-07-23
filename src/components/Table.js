@@ -141,14 +141,47 @@ const Table = ({ data, highlightCols = [] }) => {
             padding: '10px 20px',
             borderRadius: 10,
             border: 'none',
-            background: '#444',
+            background: '#e53935',
             color: '#fff',
             fontWeight: 700,
             fontSize: 16,
             cursor: 'pointer',
-            boxShadow: '0 2px 8px 0 rgba(80,80,80,0.08)',
-            transition: 'background 0.2s',
-            marginLeft: 4
+            boxShadow: '0 2px 8px 0 rgba(229,57,53,0.12)',
+            transition: 'all 0.18s cubic-bezier(.4,1.6,.6,1)',
+            marginLeft: 4,
+            outline: 'none',
+            position: 'relative',
+            overflow: 'hidden',
+            userSelect: 'none',
+            ...(search && {
+              background: 'linear-gradient(90deg,#e53935 60%,#b71c1c 100%)',
+              boxShadow: '0 4px 16px 0 #e5393533',
+            })
+          }}
+          onMouseDown={e => {
+            e.currentTarget.style.transform = 'scale(0.96)';
+            e.currentTarget.style.background = 'linear-gradient(90deg,#b71c1c 60%,#e53935 100%)';
+            e.currentTarget.style.boxShadow = '0 2px 8px 0 #b71c1c44';
+          }}
+          onMouseUp={e => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.background = 'linear-gradient(90deg,#e53935 60%,#b71c1c 100%)';
+            e.currentTarget.style.boxShadow = '0 4px 16px 0 #e5393533';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.background = '#e53935';
+            e.currentTarget.style.boxShadow = '0 2px 8px 0 rgba(229,57,53,0.12)';
+          }}
+          onTouchStart={e => {
+            e.currentTarget.style.transform = 'scale(0.96)';
+            e.currentTarget.style.background = 'linear-gradient(90deg,#b71c1c 60%,#e53935 100%)';
+            e.currentTarget.style.boxShadow = '0 2px 8px 0 #b71c1c44';
+          }}
+          onTouchEnd={e => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.background = 'linear-gradient(90deg,#e53935 60%,#b71c1c 100%)';
+            e.currentTarget.style.boxShadow = '0 4px 16px 0 #e5393533';
           }}
         >Tìm kiếm</button>
       </div>
