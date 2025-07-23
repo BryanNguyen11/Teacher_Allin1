@@ -193,83 +193,69 @@ const Table = ({ data, highlightCols = [] }) => {
         filtered.map((row, idx) => {
           // Xác định màu viền và hiệu ứng metallic shimmer theo Rank
           const rank = (row['Rank'] || '').toUpperCase();
+          // Determine handle level from mapping
+          const handleByRankMap = {
+            'T0': 1, 'T1': 2, 'T2': 3, 'T3': 4, 'T4': 5, 'T5': 6, 'T6': 7, 'T7': 8, 'T8': 9, 'T9': 10, 'T10': 11, 'T11': 12, 'T12': 13, 'T13': 14, 'T14': 15, 'T15': 16, 'T16': 17, 'T17': 18, 'T18': 19, 'T19': 20, 'T20': 21
+          };
+          const handleLevel = handleByRankMap[rank] || 0;
           let borderColor = '#e0e0e0';
           let boxShadow = '0 2px 16px 0 rgba(80,80,80,0.10)';
-          let metallicColors = '';
-          let metallicAnim = false;
+          let shimmerAnim = false;
+          let hologramAnim = false;
+          let rainbowAnim = false;
+          let borderAnim = false;
           let rarityBg = '#fff';
-          if (rank.startsWith('T')) {
-            const num = parseInt(rank.slice(1), 10);
-            if (!isNaN(num)) {
-              // Thang màu sắc độ hiếm vật phẩm game:
-              // 0: xám (common), 1-2: xanh lá (uncommon), 3-4: xanh dương (rare), 5-7: tím (epic), 8-12: cam (legendary), 13-16: vàng (mythic), 17-20: đỏ (immortal)
-              if (num === 0) {
-                borderColor = '#888'; boxShadow = '0 0 12px 0 #8882';
-                metallicColors = '#b0b0b0,#e0e0e0,#888';
-                rarityBg = 'linear-gradient(120deg,#b0b0b0 0%,#e0e0e0 100%)'; // xám
-              } else if (num <= 2) {
-                borderColor = '#43e97b'; boxShadow = '0 0 12px 0 #43e97b44';
-                metallicColors = '#43e97b,#38f9d7,#e0ffe0';
-                rarityBg = 'linear-gradient(120deg,#43e97b 0%,#38f9d7 100%)'; // xanh lá
-              } else if (num <= 4) {
-                borderColor = '#3a8dde'; boxShadow = '0 0 12px 0 #3a8dde44';
-                metallicColors = '#3a8dde,#6dd5fa,#e0f7ff';
-                rarityBg = 'linear-gradient(120deg,#3a8dde 0%,#6dd5fa 100%)'; // xanh dương
-              } else if (num <= 7) {
-                borderColor = '#a259e6'; boxShadow = '0 0 12px 0 #a259e644';
-                metallicColors = '#a259e6,#fbc2eb,#e0e0ff';
-                rarityBg = 'linear-gradient(120deg,#a259e6 0%,#fbc2eb 100%)'; // tím
-              } else if (num <= 12) {
-                borderColor = '#ff9800'; boxShadow = '0 0 12px 0 #ff980044';
-                metallicColors = '#ff9800,#ffc371,#fff3e0';
-                rarityBg = 'linear-gradient(120deg,#ff9800 0%,#ffc371 100%)'; // cam
-              } else if (num <= 16) {
-                borderColor = '#ffd700'; boxShadow = '0 0 12px 0 #ffd70044';
-                metallicColors = '#ffd700,#fffbe0,#fff';
-                rarityBg = 'linear-gradient(120deg,#ffd700 0%,#fffbe0 100%)'; // vàng
-              } else if (num <= 20) {
-                borderColor = '#ff1744'; boxShadow = '0 0 12px 0 #ff174444';
-                metallicColors = '#ff1744,#ff616f,#fff';
-                rarityBg = 'linear-gradient(120deg,#ff1744 0%,#ff616f 100%)'; // đỏ
-              }
-              metallicAnim = true;
-            }
-          }
+          // All cards: silver hologram background, no border, shadow
+          shimmerAnim = false;
+          hologramAnim = false;
+          rainbowAnim = false;
+          borderAnim = false;
+          let popupAnim = false;
+          borderColor = 'transparent';
+          rarityBg = 'linear-gradient(120deg,#e0e0e0 0%,#b0e0ff 50%,#e0e0e0 100%)';
+          boxShadow = '0 4px 24px 0 #b0b0b055, 0 1.5px 8px 0 #b0e0ff33';
+          // Enable shimmer effect for all cards
+          shimmerAnim = true;
           return (
             <div
               key={idx}
               style={{
-                background: metallicAnim ? rarityBg : '#fff',
+                background: rarityBg,
                 borderRadius: 18,
+                WebkitBorderRadius: 18,
+                borderImageSlice: 1,
                 boxShadow,
                 margin: '0 auto 24px',
                 maxWidth: 480,
                 padding: 24,
                 border: '3px solid',
-                borderImage: 'linear-gradient(120deg,#00eaff,#ff00cc,#ffe53b,#00eaff,#ff00cc,#ffe53b) 1',
+                borderImage: 'linear-gradient(120deg,#00eaff,#b0e0ff,#ffe53b,#00eaff,#b0e0ff,#ffe53b) 1',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 12,
                 position: 'relative',
                 overflow: 'hidden',
-                backgroundSize: metallicAnim ? '200% 200%' : undefined,
-                backgroundPosition: metallicAnim ? `${shimmerPos}% 50%` : undefined,
-                transition: metallicAnim ? 'background-position 0.7s cubic-bezier(.4,1.6,.6,1)' : undefined,
+                backgroundSize: shimmerAnim ? '200% 200%' : undefined,
+                backgroundPosition: shimmerAnim ? `${shimmerPos}% 50%` : undefined,
+                transition: shimmerAnim ? 'background-position 0.7s cubic-bezier(.4,1.6,.6,1)' : undefined,
                 transform: popAnim ? 'scale(1.04) translateY(-10px)' : 'scale(1) translateY(0)',
                 opacity: popAnim ? 1 : 0.92,
                 filter: 'none',
-                animation: popAnim ? 'popupCardHolo 1.1s cubic-bezier(.18,.89,.32,1.28) both' : undefined
+                animation:
+                  borderAnim && rainbowAnim ? 'rainbowBorder 2.5s linear infinite, popupCardHolo 1.1s cubic-bezier(.18,.89,.32,1.28) both'
+                  : popupAnim ? 'popupCardHolo 1.1s cubic-bezier(.18,.89,.32,1.28) both'
+                  : undefined
               }}
             >
               {/* Hiệu ứng metallic shimmer overlay */}
-              {metallicAnim && (
+              {shimmerAnim && (
                 <span
                   style={{
                     position: 'absolute',
                     top: 0, left: 0, right: 0, bottom: 0,
                     pointerEvents: 'none',
                     zIndex: 1,
-                  opacity: 1,
+                    opacity: 1,
                     overflow: 'hidden',
                   }}
                 >
@@ -278,7 +264,7 @@ const Table = ({ data, highlightCols = [] }) => {
                       position: 'absolute',
                       top: 0, left: 0, right: 0, bottom: 0,
                       width: '100%', height: '100%',
-                      background: 'linear-gradient(120deg, rgba(255,255,255,0.00) 45%, rgba(255,255,255,0.45) 48%, rgba(255,255,255,0.45) 52%, rgba(255,255,255,0.00) 55%)',
+                      background: 'linear-gradient(120deg, rgba(255,255,255,0.00) 40%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, rgba(255,255,255,0.00) 60%)',
                       transform: `translate(${shimmerPos - 100}%, ${shimmerPos - 100}%)`,
                       transition: 'transform 2s cubic-bezier(.4,1.6,.6,1)',
                       pointerEvents: 'none',
