@@ -124,33 +124,29 @@ const Table = ({ data, highlightCols = [] }) => {
         </div>
       ) : (
         filtered.map((row, idx) => {
-          // Xác định màu viền và hiệu ứng theo Rank
+          // Xác định màu viền và hiệu ứng metallic shimmer theo Rank
           const rank = (row['Rank'] || '').toUpperCase();
           let borderColor = '#e0e0e0';
           let boxShadow = '0 2px 16px 0 rgba(80,80,80,0.10)';
-          let gradient = '';
-          let sparkle = false;
+          let metallicColors = '';
+          let metallicAnim = false;
           if (rank.startsWith('T')) {
             const num = parseInt(rank.slice(1), 10);
             if (!isNaN(num)) {
-              if (num === 0) { borderColor = '#888'; boxShadow = '0 0 12px 0 #8882'; } // Sắt
-              else if (num <= 2) { borderColor = '#b87333'; boxShadow = '0 0 12px 0 #b8733344'; } // Đồng
-              else if (num <= 4) { borderColor = '#aaa'; boxShadow = '0 0 12px 0 #aaa6'; } // Bạc
-              else if (num <= 7) { borderColor = '#ffd700'; boxShadow = '0 0 12px 0 #ffd70055'; } // Vàng
-              else if (num <= 12) { borderColor = '#50fa7b'; boxShadow = '0 0 12px 0 #50fa7b55'; } // Lục bảo
-              else if (num <= 16) { borderColor = '#b9f2ff'; boxShadow = '0 0 12px 0 #b9f2ff55'; } // Bạch kim
-              else if (num <= 20) { borderColor = '#00bfff'; boxShadow = '0 0 12px 0 #00bfff55'; } // Kim cương
-              if (num >= 5) {
-                // Từ T5 trở lên: gradient + sparkle
-                gradient = 'linear-gradient(120deg, #ffd700, #50fa7b, #b9f2ff, #00bfff)';
-                sparkle = true;
-              }
+              if (num === 0) { borderColor = '#888'; boxShadow = '0 0 12px 0 #8882'; metallicColors = '#b0b0b0,#e0e0e0,#888'; } // Sắt
+              else if (num <= 2) { borderColor = '#b87333'; boxShadow = '0 0 12px 0 #b8733344'; metallicColors = '#b87333,#e5c16c,#fff1c1,#b87333'; } // Đồng
+              else if (num <= 4) { borderColor = '#aaa'; boxShadow = '0 0 12px 0 #aaa6'; metallicColors = '#aaa,#e0e0e0,#fff,#aaa'; } // Bạc
+              else if (num <= 7) { borderColor = '#ffd700'; boxShadow = '0 0 12px 0 #ffd70055'; metallicColors = '#ffd700,#fffbe0,#fff,#ffd700'; } // Vàng
+              else if (num <= 12) { borderColor = '#50fa7b'; boxShadow = '0 0 12px 0 #50fa7b55'; metallicColors = '#50fa7b,#e0fff1,#fff,#50fa7b'; } // Lục bảo
+              else if (num <= 16) { borderColor = '#b9f2ff'; boxShadow = '0 0 12px 0 #b9f2ff55'; metallicColors = '#b9f2ff,#e0f7ff,#fff,#b9f2ff'; } // Bạch kim
+              else if (num <= 20) { borderColor = '#00bfff'; boxShadow = '0 0 12px 0 #00bfff55'; metallicColors = '#00bfff,#e0f7ff,#fff,#00bfff'; } // Kim cương
+              metallicAnim = true;
             }
           }
           return (
             <div key={idx}
               style={{
-                background: gradient ? gradient : '#fff',
+                background: metallicAnim && metallicColors ? `linear-gradient(120deg, ${metallicColors})` : '#fff',
                 borderRadius: 16,
                 boxShadow,
                 margin: '0 auto 24px',
@@ -162,20 +158,19 @@ const Table = ({ data, highlightCols = [] }) => {
                 gap: 12,
                 position: 'relative',
                 overflow: 'hidden',
-                animation: sparkle ? 'sparkle 1.8s linear infinite' : undefined,
-                backgroundSize: sparkle ? '200% 200%' : undefined,
-                backgroundPosition: sparkle ? `${shimmerPos}% 50%` : undefined,
-                transition: sparkle ? 'background-position 0.7s cubic-bezier(.4,1.6,.6,1)' : undefined
+                backgroundSize: metallicAnim ? '200% 200%' : undefined,
+                backgroundPosition: metallicAnim ? `${shimmerPos}% 50%` : undefined,
+                transition: metallicAnim ? 'background-position 0.7s cubic-bezier(.4,1.6,.6,1)' : undefined
               }}>
-              {/* Hiệu ứng sparkle overlay */}
-              {sparkle && (
+              {/* Hiệu ứng metallic shimmer overlay */}
+              {metallicAnim && (
                 <span style={{
                   position: 'absolute',
                   top: 0, left: 0, right: 0, bottom: 0,
                   pointerEvents: 'none',
-                  background: 'repeating-linear-gradient(120deg,rgba(255,255,255,0.18) 0 2px,transparent 2px 8px)',
+                  background: 'linear-gradient(120deg,rgba(255,255,255,0.18) 0 20%,transparent 20% 80%,rgba(255,255,255,0.18) 80% 100%)',
                   zIndex: 1,
-                  animation: 'shine 2.2s linear infinite'
+                  animation: 'metallic-shine 2.2s linear infinite'
                 }} />
               )}
               <div style={{position:'relative', zIndex:2}}>
