@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Table.css';
 
 // Make columns unique for React keys
 const rawColumns = [
-  'Full name', 'Mã LMS' , 'Khối', 'Status', 'Role', 'CR45', '15%', 'TP', '20%', 'Completion rate', '20%', 'Chỉ số chậm/ không hoàn thành DL', '20%', 'Điểm trung bình chuyên môn', '25%', 'Technical', 'Trial', 'Sư phạm', 'Điểm đánh giá (Max = 5)', 'Xếp loại', 'Đánh giá'
+  'Full name', 'Mã LMS' , 'Khối', 'Status', 'Role', 'CR45',  'TP',  'Completion rate',  'Chỉ số chậm/ không hoàn thành DL', 'Điểm trung bình chuyên môn', 'Technical', 'Trial', 'Sư phạm', 'Điểm đánh giá (Max = 5)', 'Xếp loại', 'Đánh giá'
 ];
 const columns = (() => {
   const count = {};
@@ -54,10 +54,26 @@ const defaultData = [
 const Table = ({ data, highlightCols = [] }) => {
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
+  const [shimmerPos, setShimmerPos] = useState(0);
   const tableData = Array.isArray(data) && data.length > 0 ? data : defaultData;
   const filtered = query.trim()
     ? tableData.filter(row => row['Code'] && row['Code'].toLowerCase() === query.trim().toLowerCase())
     : [];
+
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setShimmerPos(pos => (pos + 40) % 200); // move shimmer
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div>
@@ -146,7 +162,10 @@ const Table = ({ data, highlightCols = [] }) => {
                 gap: 12,
                 position: 'relative',
                 overflow: 'hidden',
-                animation: sparkle ? 'sparkle 1.8s linear infinite' : undefined
+                animation: sparkle ? 'sparkle 1.8s linear infinite' : undefined,
+                backgroundSize: sparkle ? '200% 200%' : undefined,
+                backgroundPosition: sparkle ? `${shimmerPos}% 50%` : undefined,
+                transition: sparkle ? 'background-position 0.7s cubic-bezier(.4,1.6,.6,1)' : undefined
               }}>
               {/* Hiệu ứng sparkle overlay */}
               {sparkle && (
@@ -166,20 +185,49 @@ const Table = ({ data, highlightCols = [] }) => {
                 let value = row[col];
                 if (col === 'Mã LMS' && !value && row['Code']) value = row['Code'];
                 const is3T = value && typeof value === 'string' && value.trim() === '3T' && highlightCols.includes(col);
+                // Badge style cho Status, Role
+                const isBadge = col === 'Status' || col === 'Role';
                 return (
                   <div key={colKey} style={{
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'space-between',
                     gap: 8,
-                    fontWeight: col==='Full name'||col==='Mã LMS' ? 700 : 400,
                     background: is3T ? '#ffd6d6' : undefined,
                     border: is3T ? '2px solid #d00' : undefined,
                     borderRadius: 8,
-                    padding: '6px 0',
-                    fontSize: 16
+                    padding: '8px 0',
+                    fontSize: 16,
+                    margin: '0 0 2px 0',
                   }}>
-                    <span style={{minWidth: 120, color:'#555'}}>{colKeyMap[colKey]}:</span>
-                    <span style={{color:'#222'}}>{value}</span>
+                    <span style={{
+                      minWidth: 120,
+                      color: '#333',
+                      fontWeight: 700,
+                      letterSpacing: 0.2,
+                      textAlign: 'left',
+                      flex: 1
+                    }}>{colKeyMap[colKey]}:</span>
+                    <span style={{
+                      color: isBadge ? '#fff' : '#222',
+                      fontWeight: isBadge ? 700 : 500,
+                      background: isBadge ? (col === 'Status' ? (value === 'Active' ? 'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)' : 'linear-gradient(90deg,#ff5858 0%,#f09819 100%)') : 'linear-gradient(90deg,#667eea 0%,#764ba2 100%)') : undefined,
+                      borderRadius: isBadge ? '999px' : undefined,
+                      padding: isBadge ? '2px 12px' : undefined,
+                      boxShadow: isBadge ? '0 2px 8px 0 rgba(80,80,80,0.10)' : undefined,
+                      border: isBadge ? '1.5px solid #eee' : undefined,
+                      marginLeft: isBadge ? 8 : undefined,
+                      fontSize: isBadge ? 15 : 16,
+                      letterSpacing: isBadge ? 0.5 : undefined,
+                      transition: 'all 0.2s',
+                      textAlign: isBadge ? 'center' : 'right',
+                      display: isBadge ? 'inline-block' : 'block',
+                      minWidth: isBadge ? 36 : undefined,
+                      maxWidth: isBadge ? 120 : undefined,
+                      whiteSpace: isBadge ? 'nowrap' : undefined,
+                      position: 'relative',
+                      zIndex: 2
+                    }}>{value}</span>
                   </div>
                 );
               })}
