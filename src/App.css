@@ -29,13 +29,21 @@
 }
 
 
+
 .main-content {
   flex: 1;
-  margin-left: 72px;
+  margin-left: 180px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: #fff;
+}
+
+@media (max-width: 800px) {
+  .main-content {
+    margin-left: 0 !important;
+    padding-bottom: 56px;
+  }
 }
 
 .modern-header {

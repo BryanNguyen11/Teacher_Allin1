@@ -7,8 +7,8 @@ const Sidebar = () => {
       <div className="sidebar-title">Teacher AI1</div>
       <ul className="sidebar-menu">
         <li className="active"><span>Chỉ số giáo viên</span></li>
-        <li><span>Chức năng 2</span></li>
-        <li><span>Chức năng 3</span></li>
+        <li><span>Deadline</span></li>
+        <li><span>Lịch</span></li>
         {/* Thêm các mục khác ở đây */}
       </ul>
     </nav>
