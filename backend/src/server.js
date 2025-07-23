@@ -26,6 +26,12 @@ mongoose.connect(MONGO_URI, {
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      // Keep-alive: tự động gửi request đến chính server mỗi 50s
+      setInterval(() => {
+        fetch(`http://localhost:${PORT}/`, { method: 'GET' })
+          .then(() => console.log('Keep-alive ping sent'))
+          .catch(() => {});
+      }, 50000); // 50s
     });
   })
   .catch(err => {
