@@ -236,15 +236,17 @@ const Table = ({ data, highlightCols = [] }) => {
             }
           }
           return (
-            <div key={idx}
+            <div
+              key={idx}
               style={{
                 background: metallicAnim ? rarityBg : '#fff',
-                borderRadius: 16,
+                borderRadius: 18,
                 boxShadow,
                 margin: '0 auto 24px',
                 maxWidth: 480,
                 padding: 24,
-                border: `2.5px solid ${borderColor}`,
+                border: '3px solid',
+                borderImage: 'linear-gradient(120deg,#00eaff,#ff00cc,#ffe53b,#00eaff,#ff00cc,#ffe53b) 1',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 12,
@@ -253,10 +255,12 @@ const Table = ({ data, highlightCols = [] }) => {
                 backgroundSize: metallicAnim ? '200% 200%' : undefined,
                 backgroundPosition: metallicAnim ? `${shimmerPos}% 50%` : undefined,
                 transition: metallicAnim ? 'background-position 0.7s cubic-bezier(.4,1.6,.6,1)' : undefined,
-                transform: popAnim ? 'scale(1.06)' : 'scale(1)',
-                opacity: popAnim ? 1 : 0.96,
-                animation: popAnim ? 'popupCard 0.85s cubic-bezier(.18,.89,.32,1.28) both' : undefined
-              }}>
+                transform: popAnim ? 'scale(1.04) translateY(-10px)' : 'scale(1) translateY(0)',
+                opacity: popAnim ? 1 : 0.92,
+                filter: 'none',
+                animation: popAnim ? 'popupCardHolo 1.1s cubic-bezier(.18,.89,.32,1.28) both' : undefined
+              }}
+            >
               {/* Hiệu ứng metallic shimmer overlay */}
               {metallicAnim && (
                 <span
@@ -265,7 +269,7 @@ const Table = ({ data, highlightCols = [] }) => {
                     top: 0, left: 0, right: 0, bottom: 0,
                     pointerEvents: 'none',
                     zIndex: 1,
-                    background: 'none',
+                  opacity: 1,
                     overflow: 'hidden',
                   }}
                 >
