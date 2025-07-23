@@ -179,6 +179,20 @@ function App() {
           <h2 style={{marginTop: 32, marginBottom: 24, color: '#222', textAlign: 'center', letterSpacing: 1, fontWeight: 700, textShadow: '0 2px 8px #e0e7ef'}}>Bảng Chỉ Số Giáo Viên</h2>
           <Table data={tableData} highlightCols={highlightCols} />
         </main>
+        <footer style={{
+          width: '100%',
+          background: '#111',
+          color: '#fff',
+          textAlign: 'center',
+          padding: '18px 8px 18px 8px',
+          fontSize: 16,
+          fontWeight: 500,
+          letterSpacing: 1,
+          marginTop: 32,
+          zIndex: 5
+        }}>
+          © {new Date().getFullYear()} Quyền sáng tạo và sở hữu thuộc về HCM03
+        </footer>
       </div>
     </div>
   );
