@@ -1,3 +1,13 @@
+// Keep-alive: periodically ping backend to prevent Render from sleeping
+const KEEP_ALIVE_URL = process.env.REACT_APP_API_BASE || 'https://teacher-allin1.onrender.com';
+  // Keep-alive effect: ping backend every 4 minutes (Render free sleeps after 15min idle)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch(`${KEEP_ALIVE_URL}/api/csv/files`, { method: 'GET' })
+        .catch(() => {}); // ignore errors
+    }, 240000); // 4 minutes
+    return () => clearInterval(interval);
+  }, []);
 import React, { useState, useEffect } from 'react';
 import '../Table.css';
 
