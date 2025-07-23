@@ -65,7 +65,7 @@ const Table = ({ data, highlightCols = [] }) => {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setShimmerPos(pos => (pos + 40) % 200); // move shimmer
+          setShimmerPos(pos => (pos + 4) % 200); // move shimmer (chậm hơn 10 lần)
           ticking = false;
         });
         ticking = true;
@@ -164,14 +164,30 @@ const Table = ({ data, highlightCols = [] }) => {
               }}>
               {/* Hiệu ứng metallic shimmer overlay */}
               {metallicAnim && (
-                <span style={{
-                  position: 'absolute',
-                  top: 0, left: 0, right: 0, bottom: 0,
-                  pointerEvents: 'none',
-                  background: 'linear-gradient(120deg,rgba(255,255,255,0.18) 0 20%,transparent 20% 80%,rgba(255,255,255,0.18) 80% 100%)',
-                  zIndex: 1,
-                  animation: 'metallic-shine 2.2s linear infinite'
-                }} />
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    pointerEvents: 'none',
+                    zIndex: 1,
+                    background: 'none',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: 0, left: 0, right: 0, bottom: 0,
+                      width: '100%', height: '100%',
+                      background: 'linear-gradient(120deg, rgba(255,255,255,0.00) 45%, rgba(255,255,255,0.45) 48%, rgba(255,255,255,0.45) 52%, rgba(255,255,255,0.00) 55%)',
+                      transform: `translate(${shimmerPos - 100}%, ${shimmerPos - 100}%)`,
+                      transition: 'transform 2s cubic-bezier(.4,1.6,.6,1)',
+                      pointerEvents: 'none',
+                      zIndex: 2,
+                      willChange: 'transform',
+                    }}
+                  />
+                </span>
               )}
               <div style={{position:'relative', zIndex:2}}>
               {columns.map(colKey => {
