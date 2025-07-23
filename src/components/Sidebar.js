@@ -6,8 +6,8 @@ const Sidebar = () => {
     <nav className="sidebar-modern">
       <ul className="sidebar-modern-menu">
         <li className="active"><span>Chỉ số giáo viên</span></li>
-        <li><span>Chức năng 2</span></li>
-        <li><span>Chức năng 3</span></li>
+        <li><span>Deadline</span></li>
+        <li><span>Lịch</span></li>
       </ul>
     </nav>
   );
