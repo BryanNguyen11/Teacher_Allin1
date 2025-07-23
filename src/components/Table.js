@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import '../Table.css';
+const Table = ({ data, highlightCols = [] }) => {
   // Keep-alive: periodically ping backend to prevent Render from sleeping
   useEffect(() => {
     const KEEP_ALIVE_URL = process.env.REACT_APP_API_BASE || 'https://teacher-allin1.onrender.com';
@@ -565,6 +566,6 @@ const Table = ({ data, highlightCols = [] }) => {
       )}
     </div>
   );
-};
+}
 
 export default Table;
