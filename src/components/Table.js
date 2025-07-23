@@ -1,16 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import '../Table.css';
-const Table = ({ data, highlightCols = [] }) => {
-  // Keep-alive: periodically ping backend to prevent Render from sleeping
-  useEffect(() => {
-    const KEEP_ALIVE_URL = process.env.REACT_APP_API_BASE || 'https://teacher-allin1.onrender.com';
-    const interval = setInterval(() => {
-      fetch(`${KEEP_ALIVE_URL}/api/csv/files`, { method: 'GET' })
-        .catch(() => {}); // ignore errors
-    }, 240000); // 4 minutes
-    return () => clearInterval(interval);
-  }, []);
+// Keep-alive: periodically ping backend to prevent Render from sleeping
+useEffect(() => {
+  const KEEP_ALIVE_URL = process.env.REACT_APP_API_BASE || 'https://teacher-allin1.onrender.com';
+  const interval = setInterval(() => {
+    fetch(`${KEEP_ALIVE_URL}/api/csv/files`, { method: 'GET' })
+      .catch(() => {}); // ignore errors
+  }, 240000); // 4 minutes
+  return () => clearInterval(interval);
+}, []);
 
 // Make columns unique for React keys
 const rawColumns = [
