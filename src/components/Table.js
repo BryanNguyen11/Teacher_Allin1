@@ -130,23 +130,48 @@ const Table = ({ data, highlightCols = [] }) => {
           let boxShadow = '0 2px 16px 0 rgba(80,80,80,0.10)';
           let metallicColors = '';
           let metallicAnim = false;
+          let rarityBg = '#fff';
           if (rank.startsWith('T')) {
             const num = parseInt(rank.slice(1), 10);
             if (!isNaN(num)) {
-              if (num === 0) { borderColor = '#888'; boxShadow = '0 0 12px 0 #8882'; metallicColors = '#b0b0b0,#e0e0e0,#888'; } // Sắt
-              else if (num <= 2) { borderColor = '#b87333'; boxShadow = '0 0 12px 0 #b8733344'; metallicColors = '#b87333,#e5c16c,#fff1c1,#b87333'; } // Đồng
-              else if (num <= 4) { borderColor = '#aaa'; boxShadow = '0 0 12px 0 #aaa6'; metallicColors = '#aaa,#e0e0e0,#fff,#aaa'; } // Bạc
-              else if (num <= 7) { borderColor = '#ffd700'; boxShadow = '0 0 12px 0 #ffd70055'; metallicColors = '#ffd700,#fffbe0,#fff,#ffd700'; } // Vàng
-              else if (num <= 12) { borderColor = '#50fa7b'; boxShadow = '0 0 12px 0 #50fa7b55'; metallicColors = '#50fa7b,#e0fff1,#fff,#50fa7b'; } // Lục bảo
-              else if (num <= 16) { borderColor = '#b9f2ff'; boxShadow = '0 0 12px 0 #b9f2ff55'; metallicColors = '#b9f2ff,#e0f7ff,#fff,#b9f2ff'; } // Bạch kim
-              else if (num <= 20) { borderColor = '#00bfff'; boxShadow = '0 0 12px 0 #00bfff55'; metallicColors = '#00bfff,#e0f7ff,#fff,#00bfff'; } // Kim cương
+              // Thang màu sắc độ hiếm vật phẩm game:
+              // 0: xám (common), 1-2: xanh lá (uncommon), 3-4: xanh dương (rare), 5-7: tím (epic), 8-12: cam (legendary), 13-16: vàng (mythic), 17-20: đỏ (immortal)
+              if (num === 0) {
+                borderColor = '#888'; boxShadow = '0 0 12px 0 #8882';
+                metallicColors = '#b0b0b0,#e0e0e0,#888';
+                rarityBg = 'linear-gradient(120deg,#b0b0b0 0%,#e0e0e0 100%)'; // xám
+              } else if (num <= 2) {
+                borderColor = '#43e97b'; boxShadow = '0 0 12px 0 #43e97b44';
+                metallicColors = '#43e97b,#38f9d7,#e0ffe0';
+                rarityBg = 'linear-gradient(120deg,#43e97b 0%,#38f9d7 100%)'; // xanh lá
+              } else if (num <= 4) {
+                borderColor = '#3a8dde'; boxShadow = '0 0 12px 0 #3a8dde44';
+                metallicColors = '#3a8dde,#6dd5fa,#e0f7ff';
+                rarityBg = 'linear-gradient(120deg,#3a8dde 0%,#6dd5fa 100%)'; // xanh dương
+              } else if (num <= 7) {
+                borderColor = '#a259e6'; boxShadow = '0 0 12px 0 #a259e644';
+                metallicColors = '#a259e6,#fbc2eb,#e0e0ff';
+                rarityBg = 'linear-gradient(120deg,#a259e6 0%,#fbc2eb 100%)'; // tím
+              } else if (num <= 12) {
+                borderColor = '#ff9800'; boxShadow = '0 0 12px 0 #ff980044';
+                metallicColors = '#ff9800,#ffc371,#fff3e0';
+                rarityBg = 'linear-gradient(120deg,#ff9800 0%,#ffc371 100%)'; // cam
+              } else if (num <= 16) {
+                borderColor = '#ffd700'; boxShadow = '0 0 12px 0 #ffd70044';
+                metallicColors = '#ffd700,#fffbe0,#fff';
+                rarityBg = 'linear-gradient(120deg,#ffd700 0%,#fffbe0 100%)'; // vàng
+              } else if (num <= 20) {
+                borderColor = '#ff1744'; boxShadow = '0 0 12px 0 #ff174444';
+                metallicColors = '#ff1744,#ff616f,#fff';
+                rarityBg = 'linear-gradient(120deg,#ff1744 0%,#ff616f 100%)'; // đỏ
+              }
               metallicAnim = true;
             }
           }
           return (
             <div key={idx}
               style={{
-                background: metallicAnim && metallicColors ? `linear-gradient(120deg, ${metallicColors})` : '#fff',
+                background: metallicAnim ? rarityBg : '#fff',
                 borderRadius: 16,
                 boxShadow,
                 margin: '0 auto 24px',
