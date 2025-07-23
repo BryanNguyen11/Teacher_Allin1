@@ -148,7 +148,7 @@ function App() {
             >
               <span style={{fontSize:24, fontWeight:900}}>{showSidebar ? '☰' : '☰'}</span>
             </button>
-            <img src="/favicon.ico" alt="logo" style={{width:36, height:36, borderRadius:8, boxShadow:'0 2px 8px #e0e0e0'}} />
+            <img src="/logoMindx.png" alt="logo" style={{width:52, height:52, borderRadius:12, boxShadow:'0 2px 12px #e0e0e0', background:'#fff', objectFit:'contain', padding:4}} />
             <span style={{fontWeight:800, fontSize: '1.45rem', color:'#222', letterSpacing:1}}>Teacher AI1</span>
           </div>
           
