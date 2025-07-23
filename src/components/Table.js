@@ -55,6 +55,7 @@ const Table = ({ data, highlightCols = [] }) => {
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
   const [shimmerPos, setShimmerPos] = useState(0);
+  const [popAnim, setPopAnim] = useState(false);
   const tableData = Array.isArray(data) && data.length > 0 ? data : defaultData;
   const filtered = query.trim()
     ? tableData.filter(row => row['Code'] && row['Code'].toLowerCase() === query.trim().toLowerCase())
@@ -74,6 +75,15 @@ const Table = ({ data, highlightCols = [] }) => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Hiệu ứng pop up khi tìm kiếm
+  useEffect(() => {
+    if (filtered.length > 0 && query.trim()) {
+      setPopAnim(true);
+      const t = setTimeout(() => setPopAnim(false), 600);
+      return () => clearTimeout(t);
+    }
+  }, [query]);
 
   return (
     <div>
@@ -185,7 +195,10 @@ const Table = ({ data, highlightCols = [] }) => {
                 overflow: 'hidden',
                 backgroundSize: metallicAnim ? '200% 200%' : undefined,
                 backgroundPosition: metallicAnim ? `${shimmerPos}% 50%` : undefined,
-                transition: metallicAnim ? 'background-position 0.7s cubic-bezier(.4,1.6,.6,1)' : undefined
+                transition: metallicAnim ? 'background-position 0.7s cubic-bezier(.4,1.6,.6,1)' : undefined,
+                transform: popAnim ? 'scale(1.06)' : 'scale(1)',
+                opacity: popAnim ? 1 : 0.96,
+                animation: popAnim ? 'popupCard 0.85s cubic-bezier(.18,.89,.32,1.28) both' : undefined
               }}>
               {/* Hiệu ứng metallic shimmer overlay */}
               {metallicAnim && (
@@ -235,7 +248,7 @@ const Table = ({ data, highlightCols = [] }) => {
                     padding: '8px 0',
                     fontSize: 16,
                     margin: '0 0 2px 0',
-                    boxShadow: is3T ? '0 0 12px 2px #ff5858cc, 0 0 32px 4px #ffb34788' : undefined,
+                    boxShadow: undefined,
                     position: 'relative',
                     overflow: is3T ? 'visible' : undefined,
                     zIndex: is3T ? 3 : undefined,
