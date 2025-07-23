@@ -284,7 +284,7 @@ const Table = ({ data, highlightCols = [] }) => {
           maxWidth: 400,
           boxShadow: '0 2px 16px 0 rgba(80,80,80,0.10)',
         }}>
-          Không tìm thấy giáo viên với CODE này.
+          Không tìm thấy giáo viên với mã LMS này.
         </div>
       ) : (
         filtered.map((row, idx) => {

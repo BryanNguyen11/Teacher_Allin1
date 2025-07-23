@@ -107,51 +107,61 @@ function App() {
   }
 
   return (
-    <div className="App" style={{background:'#fff', minHeight:'100vh', display:'flex'}}>
+    <div className="App" style={{
+      background:'#fff',
+      minHeight:'100vh',
+      display:'flex',
+      width: '100vw',
+      maxWidth: '100vw',
+      overflowX: 'hidden'
+    }}>
       {showSidebar && <Sidebar />}
       <div
         className="main-content"
         style={{
           marginLeft: showSidebar ? 180 : 0,
           transition: 'margin-left 0.3s',
-          width: '100%'
+          width: '100%',
+          maxWidth: '100vw',
+          overflowX: 'hidden'
         }}
       >
         <header className="modern-header" style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           background: '#fff',
           boxShadow: '0 2px 16px 0 rgba(80,80,80,0.08)',
-          padding: '0 32px',
-          minHeight: 64,
+          padding: '0 16px',
+          minHeight: 44,
+          height: 48,
           borderBottom: '1.5px solid #e0e0e0',
           position: 'sticky',
           top: 0,
           zIndex: 10
         }}>
-          <div style={{display:'flex', alignItems:'center', gap:12}}>
-            <button
-              onClick={() => setShowSidebar(v => !v)}
-              style={{
-                background: '#f5f6fa',
-                border: 'none',
-                borderRadius: 8,
-                padding: 8,
-                fontWeight: 700,
-                fontSize: 20,
-                color: '#222',
-                cursor: 'pointer',
-                boxShadow: '0 2px 8px 0 rgba(80,80,80,0.06)',
-                transition: 'background 0.2s',
-                marginRight: 8
-              }}
-              aria-label={showSidebar ? 'Ẩn menu' : 'Hiện menu'}
-            >
-              <span style={{fontSize:24, fontWeight:900}}>{showSidebar ? '☰' : '☰'}</span>
-            </button>
-            <img src="/logoMindx.png" alt="logo" style={{width:52, height:52, borderRadius:12, boxShadow:'0 2px 12px #e0e0e0', background:'#fff', objectFit:'contain', padding:4}} />
-            <span style={{fontWeight:800, fontSize: '1.45rem', color:'#222', letterSpacing:1}}>Teacher AI1</span>
+          <div style={{display:'flex', alignItems:'center', gap:8}}>
+            <img src="/logoMindx.png" alt="logo" style={{width:32, height:32, borderRadius:8, boxShadow:'0 2px 8px #e0e0e0', background:'#fff', objectFit:'contain', padding:2}} />
+            <span style={{fontWeight:800, fontSize: '1.1rem', color:'#222', letterSpacing:1}}>Teacher AI1</span>
           </div>
-          
+          <button
+            onClick={() => setShowSidebar(v => !v)}
+            style={{
+              background: '#f5f6fa',
+              border: 'none',
+              borderRadius: 8,
+              padding: 6,
+              fontWeight: 700,
+              fontSize: 18,
+              
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px 0 rgba(80,80,80,0.06)',
+              transition: 'background 0.2s',
+              marginLeft: 8,
+              marginRight: 60
+            }}
+            aria-label={showSidebar ? 'Ẩn menu' : 'Hiện menu'}
+          >
+            <span style={{fontSize:20, fontWeight:900}}>{showSidebar ? '☰' : '☰'}</span>
+          </button>
         </header>
         {showUpload && (
           <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:12, margin:'16px 0'}}>
