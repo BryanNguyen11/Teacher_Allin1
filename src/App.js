@@ -2,6 +2,7 @@
 
 
 import React, { useState, useRef, useEffect } from 'react';
+import keepServerAwake from './keepAwake';
 import Table from './components/Table';
 import Sidebar from './components/Sidebar';
 import './App.css';
@@ -11,6 +12,10 @@ const API_BASE = process.env.REACT_APP_API_BASE || 'https://teacher-allin1.onren
 
 
 function App() {
+  // Gọi keepServerAwake để giữ server Render luôn thức
+  useEffect(() => {
+    keepServerAwake();
+  }, []);
   const [showSidebar, setShowSidebar] = useState(true);
   const [tableData, setTableData] = useState(null);
   const fileInputRef = useRef();
