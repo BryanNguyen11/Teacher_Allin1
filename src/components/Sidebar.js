@@ -1,13 +1,13 @@
 import React from 'react';
 import '../Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ onNavigate }) => {
   return (
     <nav className="sidebar-modern">
       <ul className="sidebar-modern-menu">
-        <li className="active"><span>Chỉ số giáo viên</span></li>
+        <li className="active" onClick={() => onNavigate && onNavigate('dashboard')}><span>Chỉ số giáo viên</span></li>
         <li><span>Deadline</span></li>
-        <li><span>Lịch</span></li>
+        <li onClick={() => onNavigate && onNavigate('calendar')}><span>Lịch</span></li>
       </ul>
     </nav>
   );

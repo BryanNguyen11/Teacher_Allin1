@@ -4,14 +4,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import keepServerAwake from './keepAwake';
 import Table from './components/Table';
+import CalendarPage from './components/CalendarPage';
 import Sidebar from './components/Sidebar';
 import './App.css';
 
 // Sử dụng biến môi trường REACT_APP_API_BASE, fallback về render nếu không có
 const API_BASE = process.env.REACT_APP_API_BASE || 'https://teacher-allin1.onrender.com';
 
-
 function App() {
+
   // Gọi keepServerAwake để giữ server Render luôn thức
   useEffect(() => {
     keepServerAwake();
@@ -23,6 +24,8 @@ function App() {
   const [password, setPassword] = useState('');
   const [uploadError, setUploadError] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState('');
+  // State để điều hướng trang ("dashboard" hoặc "calendar")
+  const [page, setPage] = useState('dashboard');
 
   async function handleCSVUpload(e) {
     const file = e.target.files[0];
@@ -120,7 +123,7 @@ function App() {
       maxWidth: '100vw',
       overflowX: 'hidden'
     }}>
-      {showSidebar && <Sidebar />}
+      {showSidebar && <Sidebar onNavigate={setPage} />}
       <div
         className="main-content"
         style={{
@@ -191,8 +194,15 @@ function App() {
           </div>
         )}
         <main>
-          <h2 style={{marginTop: 32, marginBottom: 24, color: '#222', textAlign: 'center', letterSpacing: 1, fontWeight: 700, textShadow: '0 2px 8px #e0e7ef'}}>Bảng Chỉ Số Giáo Viên</h2>
-          <Table data={tableData} highlightCols={highlightCols} />
+          {page === 'dashboard' && (
+            <>
+              <h2 style={{marginTop: 32, marginBottom: 24, color: '#222', textAlign: 'center', letterSpacing: 1, fontWeight: 700, textShadow: '0 2px 8px #e0e7ef'}}>Bảng Chỉ Số Giáo Viên</h2>
+              <Table data={tableData} highlightCols={highlightCols} />
+            </>
+          )}
+          {page === 'calendar' && (
+            <CalendarPage />
+          )}
         </main>
         <footer style={{
           width: '100%',

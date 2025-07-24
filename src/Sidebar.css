@@ -66,10 +66,11 @@
     padding-top: 0;
     bottom: 0;
     top: auto;
-    left: 0;
+    left: auto;
     right: 0;
     border-radius: 0;
     box-shadow: 0 -2px 16px 0 rgba(80,80,80,0.08);
+    border-left: 1.5px solid #e0e0e0;
     border-right: none;
     border-top: 1.5px solid #e0e0e0;
     position: fixed;
