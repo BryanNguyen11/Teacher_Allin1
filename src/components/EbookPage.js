@@ -55,7 +55,7 @@ const EbookPage = () => {
 
   return (
     <div style={{width:'100%', minHeight:'80vh', background:'#fff', padding:'16px 0', display:'flex', flexDirection:'column', alignItems:'center'}}>
-      <h2 style={{fontWeight:800, fontSize:'1.5rem', color:'#1976d2', marginBottom:18, letterSpacing:1, textAlign:'center'}}>Ebook - Tài liệu PDF</h2>
+      <h2 style={{fontWeight:800, fontSize:'1.5rem', color:'#1976d2', marginBottom:18, letterSpacing:1, textAlign:'center'}}>Tài liệu cho giáo viên</h2>
       <div style={{maxWidth:900, width:'100%', margin:'0 auto', display:'flex', flexDirection:'column', gap:16}}>
         <div style={{display:'flex', flexWrap:'wrap', gap:8, alignItems:'center', justifyContent:'space-between'}}>
           <span style={{fontWeight:700, fontSize:16}}>Danh sách tài liệu:</span>
@@ -75,26 +75,18 @@ const EbookPage = () => {
           {ebooks.length === 0 && <span style={{color:'#888'}}>Chưa có tài liệu nào.</span>}
         {ebooks.map((ebook, idx) => (
             <div key={ebook.id || ebook._id || idx} style={{display:'flex', alignItems:'center', gap:10, background:'#f5f6fa', borderRadius:8, padding:'10px 14px', boxShadow:'0 2px 8px #e0e0e033', cursor:'pointer'}}>
-              <span style={{fontWeight:700, color:'#1976d2', flex:1, cursor:'pointer'}} onClick={()=>setSelectedEbook(ebook)}>{ebook.title || 'Tài liệu PDF'}</span>
-              <span style={{color:'#1976d2', fontWeight:600, fontSize:14, cursor:'pointer'}} onClick={()=>setSelectedEbook(ebook)}>Xem</span>
+              <span style={{fontWeight:700, color:'#1976d2', flex:1, cursor:'pointer'}}>{ebook.title || 'Tài liệu PDF'}</span>
+              <a
+                href={ebook.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{color:'#1976d2', fontWeight:600, fontSize:14, cursor:'pointer', textDecoration:'underline'}}
+              >Xem</a>
       <DeleteEbookButton ebookId={ebook.id} onDeleted={()=>setUploadSuccess(Date.now())} />
     </div>
   ))}
 </div>
-        {selectedEbook && (
-          <div style={{marginTop:18, width:'100%', maxWidth:900, background:'#fff', borderRadius:12, boxShadow:'0 2px 16px #e0e0e033', padding:12, display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', width:'100%', marginBottom:8}}>
-              <span style={{fontWeight:700, fontSize:16, color:'#1976d2'}}>{selectedEbook.title}</span>
-              <button onClick={()=>setSelectedEbook(null)} style={{background:'none', border:'none', color:'#b00', fontWeight:700, fontSize:16, cursor:'pointer'}}>Đóng</button>
-            </div>
-            <iframe
-              src={selectedEbook.url}
-              title={selectedEbook.title}
-              style={{width:'100%', minHeight:400, height:'60vh', border:'1.5px solid #e0e0e0', borderRadius:8, background:'#fff'}}
-              allowFullScreen
-            />
-          </div>
-        )}
+
       </div>
     </div>
   );
