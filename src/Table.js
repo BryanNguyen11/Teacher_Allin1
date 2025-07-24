@@ -9,8 +9,7 @@ const columns = [
 const Table = ({ data = [] }) => {
   // Log keys của object đầu tiên để xác định tên trường
   if (Array.isArray(data) && data.length > 0) {
-    console.log('Các trường của object đầu tiên:', Object.keys(data[0]));
-    console.log('Giá trị object đầu tiên:', data[0]);
+
   }
   const [searchCode, setSearchCode] = useState('');
   const [filteredRows, setFilteredRows] = useState([]);

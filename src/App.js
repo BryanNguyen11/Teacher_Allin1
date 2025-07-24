@@ -77,14 +77,14 @@ function App() {
       const res = await fetch(`${API_BASE}/api/csv/files`);
       if (!res.ok) throw new Error('Lỗi lấy dữ liệu từ server');
       const files = await res.json();
-      console.log('Kết quả fetch từ backend:', files);
+
       if (Array.isArray(files) && files.length > 0) {
         // Nếu files[0].data là mảng lồng mảng, lấy phần tử đầu tiên
         let tableRows = files[0].data;
         if (Array.isArray(tableRows) && tableRows.length === 1 && Array.isArray(tableRows[0])) {
           tableRows = tableRows[0];
         }
-        console.log('Dữ liệu truyền vào Table:', tableRows);
+
         setTableData(tableRows);
       }
     } catch (err) {
