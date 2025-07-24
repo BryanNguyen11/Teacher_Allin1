@@ -6,6 +6,7 @@ import keepServerAwake from './keepAwake';
 import Table from './components/Table';
 import CalendarPage from './components/CalendarPage';
 import Sidebar from './components/Sidebar';
+import EbookPage from './components/EbookPage';
 import './App.css';
 
 // Sử dụng biến môi trường REACT_APP_API_BASE, fallback về render nếu không có
@@ -202,6 +203,9 @@ function App() {
           )}
           {page === 'calendar' && (
             <CalendarPage />
+          )}
+          {page === 'ebook' && (
+            <EbookPage />
           )}
         </main>
         <footer style={{
