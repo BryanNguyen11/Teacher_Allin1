@@ -62,7 +62,7 @@ const EbookPage = ({ setToast }) => {
 
   return (
     <div style={{width:'100%', minHeight:'80vh', background:'#fff', padding:'16px 0', display:'flex', flexDirection:'column', alignItems:'center'}}>
-      <h2 style={{fontWeight:800, fontSize:'1.5rem', color:'#1976d2', marginBottom:18, letterSpacing:1, textAlign:'center'}}>Tài liệu cho giáo viên</h2>
+      <h2 style={{fontWeight:800, fontSize:'1.5rem', color:'#000000', marginBottom:18, letterSpacing:1, textAlign:'center'}}>Tài liệu cho giáo viên</h2>
       <div style={{maxWidth:900, width:'100%', margin:'0 auto', display:'flex', flexDirection:'column', gap:16}}>
         <div style={{display:'flex', flexWrap:'wrap', gap:8, alignItems:'center', justifyContent:'space-between'}}>
           <span style={{fontWeight:700, fontSize:16}}>Danh sách tài liệu:</span>
@@ -165,12 +165,29 @@ function SubjectDropdown({ subject, docs, onDelete, setToast }) {
   const [searchTerm, setSearchTerm] = React.useState('');
   const filteredDocs = docs.filter(e => !searchTerm || (e.title && e.title.toLowerCase().includes(searchTerm.toLowerCase())));
   return (
-    <div style={{marginBottom:12}}>
-      <button onClick={()=>setOpen(o=>!o)} style={{background:'#1976d2', color:'#fff', fontWeight:700, border:'none', borderRadius:8, padding:'8px 18px', fontSize:15, cursor:'pointer', minWidth:120}}>
+    <div style={{marginBottom:12, width:'100%'}}>
+      <button
+        onClick={()=>setOpen(o=>!o)}
+        style={{
+          background:'#d32f2f',
+          color:'#fff',
+          fontWeight:700,
+          border:'none',
+          borderRadius:10,
+          padding:'10px 0',
+          fontSize:16,
+          cursor:'pointer',
+          minWidth:'100%',
+          width:'100%',
+          margin:'0 auto',
+          display:'block',
+          boxShadow:'0 2px 8px #e0e0e033'
+        }}
+      >
         {subject} {open ? '▲' : '▼'}
       </button>
       {open && (
-        <div style={{marginTop:8, padding:'8px 0', background:'#f8fafd', borderRadius:8, boxShadow:'0 2px 8px #e0e0e033'}}>
+        <div style={{marginTop:8, padding:'8px 0', background:'#f8fafd', borderRadius:8, boxShadow:'0 2px 8px #e0e0e033', width:'100%'}}>
           <div style={{margin:'8px 0', display:'flex', justifyContent:'center'}}>
             <input
               type="text"
