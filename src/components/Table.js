@@ -329,12 +329,12 @@ const Table = ({ data, highlightCols = [] }) => {
               style={{
                 background: rarityBg,
                 backgroundBlendMode: 'screen',
-                borderRadius: 18,
-                WebkitBorderRadius: 18,
-                boxShadow: '0 8px 32px 0 #bfc9d6cc, 0 1.5px 8px 0 #b0e0ff33, 0 2px 16px 0 rgba(80,80,80,0.10)',
-                margin: '0 auto 24px',
-                maxWidth: 480,
-                padding: 24,
+                borderRadius: 20,
+                WebkitBorderRadius: 20,
+                boxShadow: '0 6px 24px 0 #bfc9d6bb, 0 1.5px 8px 0 #b0e0ff33, 0 2px 12px 0 rgba(80,80,80,0.10)',
+                margin: '0 auto 18px',
+                maxWidth: isMobile ? 340 : 480,
+                padding: isMobile ? '16px 10px 18px 10px' : '24px 24px 22px 24px',
                 border: 'none',
                 display: 'flex',
                 flexDirection: 'column',
@@ -344,9 +344,9 @@ const Table = ({ data, highlightCols = [] }) => {
                 backgroundSize: '250% 250%',
                 backgroundPosition: '50% 50%',
                 transition: 'background 2.2s cubic-bezier(.4,1.6,.6,1)',
-                transform: popAnim ? 'scale(1.04) translateY(-10px)' : 'scale(1) translateY(0)',
+                transform: popAnim ? 'scale(1.03) translateY(-7px)' : 'scale(1) translateY(0)',
                 opacity: popAnim ? 0.98 : 0.98,
-                filter: 'blur(0.2px) brightness(1.08)',
+                filter: 'blur(0.1px) brightness(1.07)',
                 animation:
                   popAnim ? 'popupCardHolo 1.1s cubic-bezier(.18,.89,.32,1.28) both' : undefined
               }}
@@ -362,52 +362,57 @@ const Table = ({ data, highlightCols = [] }) => {
                 mixBlendMode: 'screen',
               }} />
               {/* Header: Tên, Status (bỏ Rank) */}
-              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12, zIndex:2}}>
-                <div style={{fontWeight:800, fontSize:22, color:'#4b3ca7', letterSpacing:0.5}}>{row['Full name']}</div>
-                <div style={{fontWeight:700, fontSize:15, color:'#fff', background:row['Status']==='Active'?'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)':'linear-gradient(90deg,#ff5858 0%,#f09819 100%)', borderRadius:12, padding:'4px 14px', boxShadow:'0 2px 8px 0 rgba(80,80,80,0.10)'}}>{row['Status']}</div>
+              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:isMobile?8:12, zIndex:2}}>
+                <div style={{fontWeight:800, fontSize:isMobile?18:22, color:'#4b3ca7', letterSpacing:0.5, lineHeight:1.2}}>{row['Full name']}</div>
+                <div style={{fontWeight:700, fontSize:isMobile?13:15, color:'#fff', background:row['Status']==='Active'?'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)':'linear-gradient(90deg,#ff5858 0%,#f09819 100%)', borderRadius:10, padding:isMobile?'3px 10px':'4px 14px', boxShadow:'0 2px 8px 0 rgba(80,80,80,0.10)', lineHeight:1.2}}>{row['Status']}</div>
               </div>
               {/* Divider */}
-              <div style={{height:2, width:'100%', background:'linear-gradient(90deg,#b0e0ff 0%,#e3e6ef 100%)', opacity:0.5, margin:'8px 0 16px 0', borderRadius:2}} />
+              <div style={{height:2, width:'100%', background:'linear-gradient(90deg,#b0e0ff 0%,#e3e6ef 100%)', opacity:0.5, margin:isMobile?'6px 0 12px 0':'8px 0 16px 0', borderRadius:2}} />
               {/* Main stats: TP, Điểm trung bình chuyên môn, Technical, Trial, Sư phạm */}
-              <div style={{display:'flex', flexDirection: isMobile ? 'column' : 'column', gap:0, marginBottom:12, zIndex:2}}>
+              <div style={{display:'flex', flexDirection: isMobile ? 'column' : 'column', gap:0, marginBottom:isMobile?8:12, zIndex:2}}>
                 {/* Nếu mobile: hiển thị từng chỉ số theo dạng dọc, còn lại giữ ngang */}
                 {isMobile ? (
-                  <div style={{display:'flex', flexDirection:'column', gap:10}}>
-                    <div style={{display:'flex', alignItems:'center', gap:10}}>
-                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>TP</div>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['TP']}</div>
+                  <div style={{display:'flex', flexDirection:'column', gap:8}}>
+                    {/* TP */}
+                    <div style={{display:'flex', alignItems:'center', gap:8}}>
+                      <div style={{fontWeight:700, fontSize:14, color:'#4b3ca7', minWidth:90}}>TP</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 10px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:17, color:'#222'}}>{row['TP']}</div>
                       </div>
                     </div>
-                    <div style={{display:'flex', alignItems:'center', gap:10}}>
-                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>Điểm chuyên môn</div>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Điểm trung bình chuyên môn']}</div>
+                    {/* Điểm chuyên môn */}
+                    <div style={{display:'flex', alignItems:'center', gap:8}}>
+                      <div style={{fontWeight:700, fontSize:14, color:'#4b3ca7', minWidth:90}}>Điểm chuyên môn</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 10px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:17, color:'#222'}}>{row['Điểm trung bình chuyên môn']}</div>
                       </div>
                     </div>
-                    <div style={{display:'flex', alignItems:'center', gap:10}}>
-                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>Technical</div>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Technical']}</div>
+                    {/* Technical */}
+                    <div style={{display:'flex', alignItems:'center', gap:8}}>
+                      <div style={{fontWeight:700, fontSize:14, color:'#4b3ca7', minWidth:90}}>Technical</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 10px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:17, color:'#222'}}>{row['Technical']}</div>
                       </div>
                     </div>
-                    <div style={{display:'flex', alignItems:'center', gap:10}}>
-                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>Trial</div>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Trial']}</div>
+                    {/* Trial */}
+                    <div style={{display:'flex', alignItems:'center', gap:8}}>
+                      <div style={{fontWeight:700, fontSize:14, color:'#4b3ca7', minWidth:90}}>Trial</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 10px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:17, color:'#222'}}>{row['Trial']}</div>
                       </div>
                     </div>
-                    <div style={{display:'flex', alignItems:'center', gap:10}}>
-                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>Sư phạm</div>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Sư phạm']}</div>
+                    {/* Sư phạm */}
+                    <div style={{display:'flex', alignItems:'center', gap:8}}>
+                      <div style={{fontWeight:700, fontSize:14, color:'#4b3ca7', minWidth:90}}>Sư phạm</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 10px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:17, color:'#222'}}>{row['Sư phạm']}</div>
                       </div>
                     </div>
                   </div>
                 ) : (
                   <>
                     {/* Tên trường trên một dòng */}
-                    <div style={{display:'flex', justifyContent:'space-between', gap:12, marginBottom:2}}>
+                    <div style={{display:'flex', justifyContent:'space-between', gap:10, marginBottom:2}}>
                       <div style={{flex:1, fontWeight:700, fontSize:15, color:'#4b3ca7', textAlign:'center'}}>TP</div>
                       <div style={{flex:1, fontWeight:700, fontSize:15, color:'#4b3ca7', textAlign:'center'}}>Điểm chuyên môn</div>
                       <div style={{flex:1, fontWeight:700, fontSize:15, color:'#4b3ca7', textAlign:'center'}}>Technical</div>
@@ -415,37 +420,37 @@ const Table = ({ data, highlightCols = [] }) => {
                       <div style={{flex:1, fontWeight:700, fontSize:15, color:'#4b3ca7', textAlign:'center'}}>Sư phạm</div>
                     </div>
                     {/* Giá trị nằm dưới, mỗi trường trong box riêng */}
-                    <div style={{display:'flex', justifyContent:'space-between', gap:12}}>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['TP']}</div>
+                    <div style={{display:'flex', justifyContent:'space-between', gap:10}}>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 6px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:18, color:'#222'}}>{row['TP']}</div>
                       </div>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Điểm trung bình chuyên môn']}</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 6px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:18, color:'#222'}}>{row['Điểm trung bình chuyên môn']}</div>
                       </div>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Technical']}</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 6px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:18, color:'#222'}}>{row['Technical']}</div>
                       </div>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Trial']}</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 6px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:18, color:'#222'}}>{row['Trial']}</div>
                       </div>
-                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
-                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Sư phạm']}</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:10, padding:'8px 6px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:18, color:'#222'}}>{row['Sư phạm']}</div>
                       </div>
                     </div>
                   </>
                 )}
               </div>
               {/* Divider */}
-              <div style={{height:2, width:'100%', background:'linear-gradient(90deg,#b0e0ff 0%,#e3e6ef 100%)', opacity:0.5, margin:'8px 0 16px 0', borderRadius:2}} />
+              <div style={{height:2, width:'100%', background:'linear-gradient(90deg,#b0e0ff 0%,#e3e6ef 100%)', opacity:0.5, margin:isMobile?'6px 0 12px 0':'8px 0 16px 0', borderRadius:2}} />
               {/* Footer: Completion rate, Mức Handle, Đánh giá (nhỏ hơn, nằm trên 1 hàng) */}
-              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', zIndex:2, gap:6, marginTop:8}}>
-                <div style={{fontWeight:600, fontSize:13, color:'#4b3ca7', background:'rgba(255,255,255,0.13)', borderRadius:8, padding:'4px 10px', minWidth:90, textAlign:'center'}}>
+              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', zIndex:2, gap:isMobile?4:8, marginTop:isMobile?6:8}}>
+                <div style={{fontWeight:600, fontSize:isMobile?12:13, color:'#4b3ca7', background:'rgba(255,255,255,0.13)', borderRadius:7, padding:isMobile?'3px 7px':'4px 10px', minWidth:isMobile?70:90, textAlign:'center', lineHeight:1.2}}>
                   Completion rate: <span style={{color:'#222', fontWeight:700}}>{row['Completion rate']}</span>
                 </div>
-                <div style={{fontWeight:600, fontSize:13, color:'#4b3ca7', background:'rgba(255,255,255,0.13)', borderRadius:8, padding:'4px 10px', minWidth:90, textAlign:'center'}}>
+                <div style={{fontWeight:600, fontSize:isMobile?12:13, color:'#4b3ca7', background:'rgba(255,255,255,0.13)', borderRadius:7, padding:isMobile?'3px 7px':'4px 10px', minWidth:isMobile?70:90, textAlign:'center', lineHeight:1.2}}>
                   Mức Handle: <span style={{color:'#222', fontWeight:700}}>{handleByRank[row['Rank']] || ''}</span>
                 </div>
-                <div style={{fontWeight:600, fontSize:13, color:'#4b3ca7', background:'rgba(255,255,255,0.13)', borderRadius:8, padding:'4px 10px', minWidth:90, textAlign:'center'}}>
+                <div style={{fontWeight:600, fontSize:isMobile?12:13, color:'#4b3ca7', background:'rgba(255,255,255,0.13)', borderRadius:7, padding:isMobile?'3px 7px':'4px 10px', minWidth:isMobile?70:90, textAlign:'center', lineHeight:1.2}}>
                   Đánh giá: <span style={{color:'#222', fontWeight:700}}>{row['Đánh giá']}</span>
                 </div>
               </div>
