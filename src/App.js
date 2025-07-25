@@ -151,8 +151,8 @@ function App() {
           zIndex: 10
         }}>
           <div style={{display:'flex', alignItems:'center', gap:8}}>
-            <img src="/logoMindx.png" alt="logo" style={{width:32, height:32, borderRadius:8, boxShadow:'0 2px 8px #e0e0e0', background:'#fff', objectFit:'contain', padding:2}} />
-            <span style={{fontWeight:800, fontSize: '1.1rem', color:'#222', letterSpacing:1}}>Teacher AI1</span>
+            <img src="/logomindx12.jpg" alt="logo" style={{width:32, height:32, borderRadius:8, boxShadow:'0 2px 8px #e0e0e0', background:'#fff', objectFit:'contain', padding:2}} />
+            <span style={{fontWeight:800, fontSize: '1.1rem', color:'#222', letterSpacing:1}}>MINDX AIO</span>
           </div>
           <button
             onClick={() => setShowSidebar(v => !v)}
