@@ -8,6 +8,7 @@
   left: 0;
   height: 100vh;
   width: 180px;
+  min-width: 180px;
   background: #fff;
   box-shadow: 2px 0 16px 0 rgba(80,80,80,0.08);
   border-right: 1.5px solid #e0e0e0;
@@ -16,6 +17,7 @@
   z-index: 100;
   align-items: center;
   padding-top: 24px;
+  overflow-x: auto;
 }
 
 .sidebar-modern-menu {
@@ -27,10 +29,12 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
+  min-width: 180px;
+  overflow-x: auto;
 }
 
 .sidebar-modern-menu li {
-  padding: 14px 0;
+  padding: 14px 16px;
   color: #222;
   font-size: 1.1rem;
   border-radius: 10px;
@@ -39,9 +43,11 @@
   font-weight: 600;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
   margin: 0 8px;
+  min-width: 140px;
+  white-space: nowrap;
 }
 
 .sidebar-modern-menu li.active, .sidebar-modern-menu li:hover {
@@ -57,58 +63,36 @@
 
 @media (max-width: 800px) {
   .sidebar-modern {
-    width: 100vw;
-    min-width: 0;
-    height: 56px;
-    flex-direction: row;
+    width: 140px;
+    min-width: 120px;
+    max-width: 60vw;
+    height: 100vh;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding-top: 0;
-    bottom: 0;
-    top: auto;
-    left: auto;
-    right: 0;
-    border-radius: 0;
-    box-shadow: 0 -2px 16px 0 rgba(80,80,80,0.08);
-    border-left: 1.5px solid #e0e0e0;
-    border-right: none;
-    border-top: 1.5px solid #e0e0e0;
+    padding-top: 16px;
+    border-right: 1.5px solid #e0e0e0;
+    border-bottom: none;
+    box-shadow: 2px 0 16px 0 rgba(80,80,80,0.08);
     position: fixed;
+    left: 0;
+    top: 0;
     z-index: 200;
+    overflow-x: auto;
   }
   .sidebar-modern-menu {
-    flex-direction: row;
-    gap: 0;
-    width: 100vw;
-    justify-content: space-around;
-    align-items: center;
-    margin: 0;
-    padding: 0;
+    flex-direction: column;
+    width: 100%;
+    min-width: 120px;
+    gap: 8px;
+    overflow-x: auto;
   }
   .sidebar-modern-menu li {
+    padding: 12px 10px;
     font-size: 1rem;
-    padding: 0 0;
-    margin: 0;
-    border-radius: 0;
-    flex: 1 1 0;
-    min-width: 0;
-    justify-content: center;
-    align-items: center;
-    height: 56px;
-    display: flex;
-    box-shadow: none;
-    background: none;
-    transition: background 0.18s, color 0.18s;
-  }
-  .sidebar-modern-menu li.active, .sidebar-modern-menu li:hover {
-    background: #f5f5f5;
-    color: #111;
-    box-shadow: none;
-  }
-  .sidebar-modern-menu li span {
-    justify-content: center;
-    width: 100%;
-    font-size: 1.05rem;
-    padding: 0;
+    min-width: 100px;
+    margin: 0 4px;
+    border-radius: 8px;
+    justify-content: flex-start;
+    white-space: nowrap;
   }
 }

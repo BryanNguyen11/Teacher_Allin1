@@ -122,150 +122,150 @@ function App() {
     });
   }
 
+  // Đóng sidebar khi chọn chức năng trên mobile
+  function handleSidebarNavigate(pageName) {
+    setPage(pageName);
+    if (window.innerWidth <= 800) setShowSidebar(false);
+  }
+
   return (
-    <div className="App" style={{
-      background:'#fff',
-      minHeight:'100vh',
-      display:'flex',
-      width: '100vw',
-      maxWidth: '100vw',
-      overflowX: 'hidden'
-    }}>
-      {loading ? (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: 'rgba(255,255,255,0.95)',
-          zIndex: 9999,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          animation: 'popupFadeIn 0.7s cubic-bezier(0.4,0,0.2,1)',
-        }}>
-          <img src="/logomindx12.jpg" alt="logo" style={{width:64, height:64, borderRadius:16, boxShadow:'0 2px 16px #e0e0e0', background:'#fff', objectFit:'contain', marginBottom:24, animation:'popupScale 0.7s cubic-bezier(0.4,0,0.2,1)'}} />
-          <span style={{fontWeight:800, fontSize: '1.5rem', color:'#222', letterSpacing:2, marginBottom:16, animation:'popupScale 0.7s cubic-bezier(0.4,0,0.2,1)'}}>MINDX AIO</span>
-          <style>{`
-            @keyframes popupFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-            @keyframes popupScale { 0% { transform: scale(0.7); opacity:0; } 100% { transform: scale(1); opacity:1; } }
-          `}</style>
-        </div>
-      ) : (
-        <>
-          {showSidebar && <Sidebar onNavigate={setPage} />}
-          <div
-            className="main-content"
-            style={{
-              marginLeft: showSidebar ? 180 : 0,
-              transition: 'margin-left 0.3s',
-              width: '100%',
-              maxWidth: '100vw',
-              overflowX: 'hidden'
-            }}
-          >
-            {/* ...existing code... */}
-            <header className="modern-header" style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              background: '#fff',
-              boxShadow: '0 2px 16px 0 rgba(80,80,80,0.08)',
-              padding: '0 16px',
-              minHeight: 44,
-              height: 48,
-              borderBottom: '1.5px solid #e0e0e0',
-              position: 'sticky',
-              top: 0,
-              zIndex: 10
-            }}>
-              <div style={{display:'flex', alignItems:'center', gap:8}}>
-                <img src="/logomindx12.jpg" alt="logo" style={{width:32, height:32, borderRadius:8, boxShadow:'0 2px 8px #e0e0e0', background:'#fff', objectFit:'contain', padding:2}} />
-                <span style={{fontWeight:800, fontSize: '1.1rem', color:'#222', letterSpacing:1}}>MINDX AIO</span>
-              </div>
-              <button
-                onClick={() => setShowSidebar(v => !v)}
-                style={{
-                  background: '#f5f6fa',
-                  border: 'none',
-                  borderRadius: 8,
-                  padding: 6,
-                  fontWeight: 700,
-                  fontSize: 18,
-                  
-                  cursor: 'pointer',
-                  boxShadow: '0 2px 8px 0 rgba(80,80,80,0.06)',
-                  transition: 'background 0.2s',
-                  marginLeft: 8,
-                  marginRight: 60
-                }}
-                aria-label={showSidebar ? 'Ẩn menu' : 'Hiện menu'}
-              >
-                <span style={{fontSize:20, fontWeight:900}}>{showSidebar ? '☰' : '☰'}</span>
-              </button>
-            </header>
-            {showUpload && (
-              <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:12, margin:'16px 0'}}>
-                <input
-                  type="password"
-                  placeholder="Nhập mật khẩu để tải lên"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  style={{padding:'8px 16px', borderRadius:8, border:'1.5px solid #e0e0e0', fontSize:16, minWidth:220}}
-                />
-                <input
-                  type="file"
-                  accept=".csv"
-                  ref={fileInputRef}
-                  style={{display:'block'}}
-                  disabled={password !== 'mindx2025'}
-                  onChange={handleCSVUpload}
-                />
-                {password !== 'mindx2025' && <span style={{color:'#b00', fontWeight:600}}>Nhập đúng mật khẩu để tải lên!</span>}
-                {uploadError && <span style={{color:'#b00', fontWeight:600}}>{uploadError}</span>}
-                {uploadSuccess && <span style={{color:'#0a0', fontWeight:600}}>{uploadSuccess}</span>}
-              </div>
-            )}
-            <main>
-              {page === 'dashboard' && (
-                <>
-                  <h2 style={{marginTop: 32, marginBottom: 24, color: '#222', textAlign: 'center', letterSpacing: 1, fontWeight: 700, textShadow: '0 2px 8px #e0e7ef'}}>Bảng Chỉ Số Giáo Viên</h2>
-                  <Table data={tableData} highlightCols={highlightCols} setToast={setToast} />
-                </>
-              )}
-              {page === 'calendar' && (
-                <CalendarPage setToast={setToast} />
-              )}
-              {page === 'ebook' && (
-                <EbookPage setToast={setToast} />
-              )}
-              {page === 'notifications' && (
-                <NotificationsPage setToast={setToast} />
-              )}
-              <ToastNotification
-                message={toast.message}
-                type={toast.type}
-                onClose={() => setToast({ message: '', type: toast.type })}
+  <div className="App" style={{
+    background:'#fff',
+    minHeight:'100vh',
+    display:'flex',
+    width: '100vw',
+    maxWidth: '100vw',
+    overflowX: 'hidden'
+  }}>
+    {loading ? (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(255,255,255,0.95)',
+        zIndex: 9999,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        animation: 'popupFadeIn 0.7s cubic-bezier(0.4,0,0.2,1)',
+      }}>
+        <img src="/logomindx12.jpg" alt="logo" style={{width:64, height:64, borderRadius:16, boxShadow:'0 2px 16px #e0e0e0', background:'#fff', objectFit:'contain', marginBottom:24, animation:'popupScale 0.7s cubic-bezier(0.4,0,0.2,1)'}} />
+        <span style={{fontWeight:800, fontSize: '1.5rem', color:'#222', letterSpacing:2, marginBottom:16, animation:'popupScale 0.7s cubic-bezier(0.4,0,0.2,1)'}}>MINDX AIO</span>
+      </div>
+    ) : (
+      <>
+        {showSidebar && <Sidebar onNavigate={handleSidebarNavigate} />}
+        <div
+          className="main-content"
+          style={{
+            marginLeft: showSidebar ? 180 : 0,
+            transition: 'margin-left 0.3s',
+            width: '100%',
+            maxWidth: '100vw',
+            overflowX: 'hidden'
+          }}
+        >
+          <header className="modern-header" style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: '#fff',
+            boxShadow: '0 2px 16px 0 rgba(80,80,80,0.08)',
+            padding: '0 16px',
+            minHeight: 44,
+            height: 48,
+            borderBottom: '1.5px solid #e0e0e0',
+            position: 'sticky',
+            top: 0,
+            zIndex: 10
+          }}>
+            <div style={{display:'flex', alignItems:'center', gap:8}}>
+              <img src="/logomindx12.jpg" alt="logo" style={{width:32, height:32, borderRadius:8, boxShadow:'0 2px 8px #e0e0e0', background:'#fff', objectFit:'contain', padding:2}} />
+              <span style={{fontWeight:800, fontSize: '1.1rem', color:'#222', letterSpacing:1}}>MINDX AIO</span>
+            </div>
+            <button
+              onClick={() => setShowSidebar(v => !v)}
+              style={{
+                background: '#f5f6fa',
+                border: 'none',
+                borderRadius: 8,
+                padding: 6,
+                fontWeight: 700,
+                fontSize: 18,
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px 0 rgba(80,80,80,0.06)',
+                transition: 'background 0.2s',
+                marginLeft: 8,
+                marginRight: 30
+              }}
+              aria-label={showSidebar ? 'Ẩn menu' : 'Hiện menu'}
+            >
+              <span style={{fontSize:20, fontWeight:900}}>{showSidebar ? '☰' : '☰'}</span>
+            </button>
+          </header>
+          {showUpload && (
+            <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:12, margin:'16px 0'}}>
+              <input
+                type="password"
+                placeholder="Nhập mật khẩu để tải lên"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                style={{padding:'8px 16px', borderRadius:8, border:'1.5px solid #e0e0e0', fontSize:16, minWidth:220}}
               />
-            </main>
-            <footer style={{
-              width: '100%',
-              background: '#111',
-              color: '#fff',
-              textAlign: 'center',
-              padding: '18px 8px 18px 8px',
-              fontSize: 16,
-              fontWeight: 500,
-              letterSpacing: 1,
-              marginTop: 32,
-              zIndex: 5
-            }}>
-              © {new Date().getFullYear()} Quyền sáng tạo và sở hữu thuộc về HCM03
-            </footer>
-          </div>
-        </>
-      )}
-    </div>
+              <input
+                type="file"
+                accept=".csv"
+                ref={fileInputRef}
+                style={{display:'block'}}
+                disabled={password !== 'mindx2025'}
+                onChange={handleCSVUpload}
+              />
+              {password !== 'mindx2025' && <span style={{color:'#b00', fontWeight:600}}>Nhập đúng mật khẩu để tải lên!</span>}
+              {uploadError && <span style={{color:'#b00', fontWeight:600}}>{uploadError}</span>}
+              {uploadSuccess && <span style={{color:'#0a0', fontWeight:600}}>{uploadSuccess}</span>}
+            </div>
+          )}
+          <main>
+            {page === 'dashboard' && (
+              <>
+                <h2 style={{marginTop: 32, marginBottom: 24, color: '#222', textAlign: 'center', letterSpacing: 1, fontWeight: 700, textShadow: '0 2px 8px #e0e7ef'}}>Bảng Chỉ Số Giáo Viên</h2>
+                <Table data={tableData} highlightCols={highlightCols} setToast={setToast} />
+              </>
+            )}
+            {page === 'calendar' && (
+              <CalendarPage setToast={setToast} />
+            )}
+            {page === 'ebook' && (
+              <EbookPage setToast={setToast} />
+            )}
+            {page === 'notifications' && (
+              <NotificationsPage setToast={setToast} />
+            )}
+            <ToastNotification
+              message={toast.message}
+              type={toast.type}
+              onClose={() => setToast({ message: '', type: toast.type })}
+            />
+          </main>
+          <footer style={{
+            width: '100%',
+            background: '#111',
+            color: '#fff',
+            textAlign: 'center',
+            padding: '18px 8px 18px 8px',
+            fontSize: 16,
+            fontWeight: 500,
+            letterSpacing: 1,
+            marginTop: 32,
+            zIndex: 5
+          }}>
+            © {new Date().getFullYear()} Quyền sáng tạo và sở hữu thuộc về HCM03
+          </footer>
+        </div>
+      </>
+    )}
+  </div>
   );
 }
 

@@ -2,14 +2,18 @@ import React from 'react';
 import '../Sidebar.css';
 
 const Sidebar = ({ onNavigate }) => {
+  // Helper: gọi onNavigate và đóng sidebar nếu cần
+  const handleClick = (page) => {
+    if (onNavigate) onNavigate(page);
+  };
   return (
     <nav className="sidebar-modern">
       <ul className="sidebar-modern-menu">
-        <li className="active" onClick={() => onNavigate && onNavigate('dashboard')}><span>Chỉ số giáo viên</span></li>
+        <li className="active" onClick={() => handleClick('dashboard')}><span>Chỉ số giáo viên</span></li>
         <li><span>Deadline</span></li>
-        <li onClick={() => onNavigate && onNavigate('calendar')}><span>Lịch</span></li>
-        <li onClick={() => onNavigate && onNavigate('notifications')}><span>Thông báo</span></li>
-        <li onClick={() => onNavigate && onNavigate('ebook')}><span>Ebook</span></li>
+        <li onClick={() => handleClick('calendar')}><span>Lịch</span></li>
+        <li onClick={() => handleClick('notifications')}><span>Thông báo</span></li>
+        <li onClick={() => handleClick('ebook')}><span>Ebook</span></li>
       </ul>
     </nav>
   );
