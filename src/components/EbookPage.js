@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const API_BASE = process.env.REACT_APP_API_BASE || 'https://teacher-allin1.onrender.com';
 
-const EbookPage = () => {
+const EbookPage = ({ setToast }) => {
   const [ebooks, setEbooks] = useState([]);
   const [showUpload, setShowUpload] = useState(false);
   const [uploadError, setUploadError] = useState('');
@@ -29,10 +29,12 @@ const EbookPage = () => {
   const handleUpload = async () => {
     if (!title || !pdfUrl || !docSubject.length) {
       setUploadError('Vui lòng nhập đủ thông tin!');
+      setToast && setToast({ message: 'Vui lòng nhập đủ thông tin!', type: 'error' });
       return;
     }
     if (password !== 'mindx2025') {
       setUploadError('Sai mật khẩu!');
+      setToast && setToast({ message: 'Sai mật khẩu!', type: 'error' });
       return;
     }
     try {
@@ -43,6 +45,7 @@ const EbookPage = () => {
       });
       if (!res.ok) throw new Error('Lỗi upload');
       setUploadSuccess('Tải lên thành công!');
+      setToast && setToast({ message: 'Tải lên thành công!', type: 'success' });
       setUploadError('');
       setShowUpload(false);
       setPassword('');
@@ -53,6 +56,7 @@ const EbookPage = () => {
     } catch {
       setUploadError('Lỗi upload lên server!');
       setUploadSuccess('');
+      setToast && setToast({ message: 'Lỗi upload lên server!', type: 'error' });
     }
   };
 
@@ -116,7 +120,7 @@ const EbookPage = () => {
 export default EbookPage;
 
 // Nút xóa tài liệu, yêu cầu nhập mật khẩu
-function DeleteEbookButton({ ebookId, onDeleted }) {
+function DeleteEbookButton({ ebookId, onDeleted, setToast }) {
   const [show, setShow] = React.useState(false);
   const [pw, setPw] = React.useState('');
   const [err, setErr] = React.useState('');
@@ -124,6 +128,7 @@ function DeleteEbookButton({ ebookId, onDeleted }) {
   const handleDelete = async () => {
     if (pw !== 'mindx2025') {
       setErr('Sai mật khẩu!');
+      setToast && setToast({ message: 'Sai mật khẩu!', type: 'error' });
       return;
     }
     setLoading(true);
@@ -133,9 +138,12 @@ function DeleteEbookButton({ ebookId, onDeleted }) {
       setShow(false);
       setPw('');
       setErr('');
+      setToast && setToast({ message: 'Xóa tài liệu thành công!', type: 'success' });
       if (onDeleted) onDeleted();
     } catch {
       setErr('Lỗi xóa tài liệu!');
+      setErr('Lỗi xóa tài liệu!');
+      setToast && setToast({ message: 'Lỗi xóa tài liệu!', type: 'error' });
     }
     setLoading(false);
   };
@@ -152,7 +160,7 @@ function DeleteEbookButton({ ebookId, onDeleted }) {
 }
 
 // Component thả menu cho từng khối
-function SubjectDropdown({ subject, docs, onDelete }) {
+function SubjectDropdown({ subject, docs, onDelete, setToast }) {
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
   const filteredDocs = docs.filter(e => !searchTerm || (e.title && e.title.toLowerCase().includes(searchTerm.toLowerCase())));
@@ -182,7 +190,7 @@ function SubjectDropdown({ subject, docs, onDelete }) {
                 rel="noopener noreferrer"
                 style={{color:'#1976d2', fontWeight:600, fontSize:14, cursor:'pointer', textDecoration:'underline'}}
               >Xem</a>
-              <DeleteEbookButton ebookId={ebook.id} onDeleted={onDelete} />
+              <DeleteEbookButton ebookId={ebook.id} onDeleted={() => { onDelete(); setToast && setToast({ message: 'Xóa tài liệu thành công!', type: 'success' }); }} setToast={setToast} />
             </div>
           ))}
         </div>

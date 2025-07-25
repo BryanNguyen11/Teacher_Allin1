@@ -8,6 +8,7 @@ const Sidebar = ({ onNavigate }) => {
         <li className="active" onClick={() => onNavigate && onNavigate('dashboard')}><span>Chỉ số giáo viên</span></li>
         <li><span>Deadline</span></li>
         <li onClick={() => onNavigate && onNavigate('calendar')}><span>Lịch</span></li>
+        <li onClick={() => onNavigate && onNavigate('notifications')}><span>Thông báo</span></li>
         <li onClick={() => onNavigate && onNavigate('ebook')}><span>Ebook</span></li>
       </ul>
     </nav>

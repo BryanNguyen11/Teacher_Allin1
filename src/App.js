@@ -7,12 +7,15 @@ import Table from './components/Table';
 import CalendarPage from './components/CalendarPage';
 import Sidebar from './components/Sidebar';
 import EbookPage from './components/EbookPage';
+import NotificationsPage, { ToastNotification } from './components/NotificationsPage';
 import './App.css';
 
 // Sử dụng biến môi trường REACT_APP_API_BASE, fallback về render nếu không có
 const API_BASE = process.env.REACT_APP_API_BASE || 'https://teacher-allin1.onrender.com';
 
 function App() {
+  // Toast notification state
+  const [toast, setToast] = useState({ message: '', type: 'success' });
 
   // Gọi keepServerAwake để giữ server Render luôn thức
   useEffect(() => {
@@ -198,15 +201,23 @@ function App() {
           {page === 'dashboard' && (
             <>
               <h2 style={{marginTop: 32, marginBottom: 24, color: '#222', textAlign: 'center', letterSpacing: 1, fontWeight: 700, textShadow: '0 2px 8px #e0e7ef'}}>Bảng Chỉ Số Giáo Viên</h2>
-              <Table data={tableData} highlightCols={highlightCols} />
+              <Table data={tableData} highlightCols={highlightCols} setToast={setToast} />
             </>
           )}
           {page === 'calendar' && (
-            <CalendarPage />
+            <CalendarPage setToast={setToast} />
           )}
           {page === 'ebook' && (
-            <EbookPage />
+            <EbookPage setToast={setToast} />
           )}
+          {page === 'notifications' && (
+            <NotificationsPage setToast={setToast} />
+          )}
+          <ToastNotification
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast({ message: '', type: toast.type })}
+          />
         </main>
         <footer style={{
           width: '100%',
