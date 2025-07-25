@@ -56,6 +56,17 @@ const Table = ({ data, highlightCols = [] }) => {
   const [query, setQuery] = useState('');
   const [shimmerPos, setShimmerPos] = useState(0);
   const [popAnim, setPopAnim] = useState(false);
+  // Hologram animation tick (must be outside map callback)
+  const [holoTick, setHoloTick] = useState(0);
+  useEffect(() => {
+    let frame;
+    const animate = () => {
+      setHoloTick(t => t + 1);
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, []);
   // Hook để lưu kích thước màn hình
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   
@@ -295,56 +306,61 @@ const Table = ({ data, highlightCols = [] }) => {
             'T0': 1, 'T1': 2, 'T2': 3, 'T3': 4, 'T4': 5, 'T5': 6, 'T6': 7, 'T7': 8, 'T8': 9, 'T9': 10, 'T10': 11, 'T11': 12, 'T12': 13, 'T13': 14, 'T14': 15, 'T15': 16, 'T16': 17, 'T17': 18, 'T18': 19, 'T19': 20, 'T20': 21
           };
           const handleLevel = handleByRankMap[rank] || 0;
-          let borderColor = '#e0e0e0';
-          let boxShadow = '0 2px 16px 0 rgba(80,80,80,0.10)';
           let shimmerAnim = false;
-          let hologramAnim = false;
-          let rainbowAnim = false;
-          let borderAnim = false;
           let rarityBg = '#fff';
-          // All cards: silver hologram background, no border, shadow
-          shimmerAnim = false;
-          hologramAnim = false;
-          rainbowAnim = false;
-          borderAnim = false;
-          let popupAnim = false;
-          borderColor = 'transparent';
-          rarityBg = 'linear-gradient(120deg,#e0e0e0 0%,#b0e0ff 50%,#e0e0e0 100%)';
-          boxShadow = '0 4px 24px 0 #b0b0b055, 0 1.5px 8px 0 #b0e0ff33';
-          // Enable shimmer effect for all cards
-          shimmerAnim = true;
+          // Làm hiệu ứng gradient hologram mềm mại hơn: giảm biên độ, tăng hòa trộn, chuyển động chậm hơn, thêm blur
+          // Gradient pastel tím-xanh-hồng, hiệu ứng hologram
+          const stops = [
+            { color: '#e3e6ef', pos: 0 },
+            { color: 'rgba(186, 146, 255, 0.22)', pos: 14 + Math.abs(Math.sin((holoTick + idx*8)/60)) * 16 }, // Purple
+            { color: 'rgba(173, 216, 230, 0.22)', pos: 28 + Math.abs(Math.cos((holoTick + idx*12)/72)) * 16 }, // Light Blue
+            { color: 'rgba(255, 182, 193, 0.22)', pos: 44 + Math.abs(Math.sin((holoTick + idx*5)/54)) * 16 }, // Pink
+            { color: 'rgba(144, 238, 255, 0.22)', pos: 60 + Math.abs(Math.cos((holoTick + idx*10)/60)) * 16 }, // Cyan
+            { color: 'rgba(255, 255, 255, 0.18)', pos: 76 + Math.abs(Math.sin((holoTick + idx*7)/80)) * 10 }, // White
+            { color: '#e3e6ef', pos: 100 }
+          ];
+          const gradientStr = stops.map(s => `${s.color} ${s.pos}%`).join(', ');
+          rarityBg = `linear-gradient(115deg, ${gradientStr})`;
+          // Loại bỏ viền thẻ, giữ bóng mượt
           return (
             <div
               key={idx}
               style={{
                 background: rarityBg,
+                backgroundBlendMode: 'screen',
                 borderRadius: 18,
                 WebkitBorderRadius: 18,
-                borderImageSlice: 1,
-                boxShadow: '0 4px 24px 0 #b0b0b055, 0 1.5px 8px 0 #b0e0ff33, 0 2px 16px 0 rgba(80,80,80,0.10)',
+                boxShadow: '0 8px 32px 0 #bfc9d6cc, 0 1.5px 8px 0 #b0e0ff33, 0 2px 16px 0 rgba(80,80,80,0.10)',
                 margin: '0 auto 24px',
                 maxWidth: 480,
                 padding: 24,
-                border: '3px solid',
-                borderImage: 'linear-gradient(120deg,#00eaff,#b0e0ff,#ffe53b,#00eaff,#b0e0ff,#ffe53b) 1',
+                border: 'none',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 12,
                 position: 'relative',
                 overflow: 'hidden',
-                backgroundSize: shimmerAnim ? '200% 200%' : undefined,
-                backgroundPosition: shimmerAnim ? `${shimmerPos}% 50%` : undefined,
-                transition: shimmerAnim ? 'background-position 0.7s cubic-bezier(.4,1.6,.6,1)' : undefined,
+                backgroundSize: '250% 250%',
+                backgroundPosition: '50% 50%',
+                transition: 'background 2.2s cubic-bezier(.4,1.6,.6,1)',
                 transform: popAnim ? 'scale(1.04) translateY(-10px)' : 'scale(1) translateY(0)',
-                opacity: popAnim ? 1 : 0.92,
-                filter: 'none',
+                opacity: popAnim ? 1 : 1,
+                filter: 'blur(0.2px) brightness(1.08)',
                 animation:
-                  borderAnim && rainbowAnim ? 'rainbowBorder 2.5s linear infinite, popupCardHolo 1.1s cubic-bezier(.18,.89,.32,1.28) both'
-                  : popupAnim ? 'popupCardHolo 1.1s cubic-bezier(.18,.89,.32,1.28) both'
-                  : undefined
+                  popAnim ? 'popupCardHolo 1.1s cubic-bezier(.18,.89,.32,1.28) both' : undefined
               }}
             >
-              {/* Hiệu ứng metallic shimmer overlay */}
+              {/* Overlay noise lấp lánh */}
+            <span style={{
+              position: 'absolute',
+              top: 0, left: 0, right: 0, bottom: 0,
+              pointerEvents: 'none',
+              zIndex: 1,
+              opacity: 0.18,
+              backgroundImage: 'url("https://www.transparenttextures.com/patterns/squairy-light.png")',
+              mixBlendMode: 'screen',
+            }} />
+            {/* Hiệu ứng metallic shimmer overlay */}
               {shimmerAnim && (
                 <span
                   style={{
