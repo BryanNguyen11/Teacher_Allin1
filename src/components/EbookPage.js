@@ -25,6 +25,7 @@ const EbookPage = () => {
   // Handle upload link
   const [pdfUrl, setPdfUrl] = useState('');
   const [docSubject, setDocSubject] = useState(['Coding']);
+  // Xóa searchTerm khỏi EbookPage, chuyển vào SubjectDropdown
   const handleUpload = async () => {
     if (!title || !pdfUrl || !docSubject.length) {
       setUploadError('Vui lòng nhập đủ thông tin!');
@@ -153,6 +154,8 @@ function DeleteEbookButton({ ebookId, onDeleted }) {
 // Component thả menu cho từng khối
 function SubjectDropdown({ subject, docs, onDelete }) {
   const [open, setOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const filteredDocs = docs.filter(e => !searchTerm || (e.title && e.title.toLowerCase().includes(searchTerm.toLowerCase())));
   return (
     <div style={{marginBottom:12}}>
       <button onClick={()=>setOpen(o=>!o)} style={{background:'#1976d2', color:'#fff', fontWeight:700, border:'none', borderRadius:8, padding:'8px 18px', fontSize:15, cursor:'pointer', minWidth:120}}>
@@ -160,8 +163,17 @@ function SubjectDropdown({ subject, docs, onDelete }) {
       </button>
       {open && (
         <div style={{marginTop:8, padding:'8px 0', background:'#f8fafd', borderRadius:8, boxShadow:'0 2px 8px #e0e0e033'}}>
-          {docs.length === 0 && <span style={{color:'#888', marginLeft:12}}>Chưa có tài liệu nào.</span>}
-          {docs.map((ebook, idx) => (
+          <div style={{margin:'8px 0', display:'flex', justifyContent:'center'}}>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              placeholder={`Tìm tài liệu ${subject}...`}
+              style={{padding:'8px 16px', borderRadius:8, border:'1.5px solid #e0e0e0', fontSize:15, minWidth:220}}
+            />
+          </div>
+          {filteredDocs.length === 0 && <span style={{color:'#888', marginLeft:12}}>Chưa có tài liệu nào.</span>}
+          {filteredDocs.map((ebook, idx) => (
             <div key={ebook.id || ebook._id || idx} style={{display:'flex', alignItems:'center', gap:10, background:'#f5f6fa', borderRadius:8, padding:'10px 14px', boxShadow:'0 2px 8px #e0e0e033', margin:'8px 0'}}>
               <span style={{fontWeight:700, color:'#1976d2', flex:1}}>{ebook.title || 'Tài liệu PDF'}</span>
               <a
