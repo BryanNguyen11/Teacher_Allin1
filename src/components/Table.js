@@ -322,6 +322,7 @@ const Table = ({ data, highlightCols = [] }) => {
           const gradientStr = stops.map(s => `${s.color} ${s.pos}%`).join(', ');
           rarityBg = `linear-gradient(115deg, ${gradientStr})`;
           // Loại bỏ viền thẻ, giữ bóng mượt
+          // Trading card layout
           return (
             <div
               key={idx}
@@ -337,7 +338,7 @@ const Table = ({ data, highlightCols = [] }) => {
                 border: 'none',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 12,
+                gap: 0,
                 position: 'relative',
                 overflow: 'hidden',
                 backgroundSize: '250% 250%',
@@ -351,223 +352,106 @@ const Table = ({ data, highlightCols = [] }) => {
               }}
             >
               {/* Overlay noise lấp lánh */}
-            <span style={{
-              position: 'absolute',
-              top: 0, left: 0, right: 0, bottom: 0,
-              pointerEvents: 'none',
-              zIndex: 1,
-              opacity: 0.10,
-              backgroundImage: 'url("https://www.transparenttextures.com/patterns/squairy-light.png")',
-              mixBlendMode: 'screen',
-            }} />
-            {/* Hiệu ứng metallic shimmer overlay */}
-              {shimmerAnim && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    pointerEvents: 'none',
-                    zIndex: 1,
-                    opacity: 1,
-                    overflow: 'hidden',
-                  }}
-                >
-                  <span
-                    style={{
-                      position: 'absolute',
-                      top: 0, left: 0, right: 0, bottom: 0,
-                      width: '100%', height: '100%',
-                      background: 'linear-gradient(120deg, rgba(255,255,255,0.00) 40%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, rgba(255,255,255,0.00) 60%)',
-                      transform: `translate(${shimmerPos - 100}%, ${shimmerPos - 100}%)`,
-                      transition: 'transform 2s cubic-bezier(.4,1.6,.6,1)',
-                      pointerEvents: 'none',
-                      zIndex: 2,
-                      willChange: 'transform',
-                    }}
-                  />
-                </span>
-              )}
-              <div style={{position:'relative', zIndex:2}}>
-              {/* Render all fields, but move 'Mức Handle' right after 'Role' */}
-              {(() => {
-                // Find the index of 'Role' in columns
-                const roleIdx = columns.findIndex(colKey => colKeyMap[colKey] === 'Role');
-                // Split columns into beforeRole, afterRole
-                const beforeRole = columns.slice(0, roleIdx + 1);
-                const afterRole = columns.slice(roleIdx + 1).filter(colKey => colKeyMap[colKey] !== 'Mức Handle');
-                // Render fields before and including 'Role'
-                const fields = beforeRole.map(colKey => {
-                  const col = colKeyMap[colKey];
-                  let value = row[col];
-                  if (col === 'Mã LMS' && !value && row['Code']) value = row['Code'];
-                  const is3T = value && typeof value === 'string' && value.trim() === '3T' && highlightCols.includes(col);
-                  const isBadge = col === 'Status' || col === 'Role';
-                  return (
-                    <div key={colKey} style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 8,
-                      background: is3T ? 'linear-gradient(90deg,#ff5858 0%,#ffb347 100%)' : undefined,
-                      border: is3T ? '3px solid #d00' : undefined,
-                      borderRadius: 10,
-                      padding: '8px 0',
-                      fontSize: 16,
-                      margin: '0 0 2px 0',
-                      boxShadow: undefined,
-                      position: 'relative',
-                      overflow: is3T ? 'visible' : undefined,
-                      zIndex: is3T ? 3 : undefined,
-                      width: is3T ? '105%' : undefined,
-                      marginLeft: is3T ? '-2.5%' : undefined
-                    }}>
-                      <span style={{
-                        minWidth: 120,
-                        color: is3T ? '#fff' : '#333',
-                        fontWeight: 700,
-                        letterSpacing: 0.2,
-                        textAlign: 'left',
-                        flex: 1,
-                        textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined,
-                        marginLeft: is3T ? 12 : undefined
-                      }}>{colKeyMap[colKey]}:</span>
-                      <span style={{
-                        color: is3T ? '#fff' : (isBadge ? '#fff' : '#222'),
-                        fontWeight: is3T ? 800 : (isBadge ? 700 : 500),
-                        background: isBadge ? (col === 'Status' ? (value === 'Active' ? 'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)' : 'linear-gradient(90deg,#ff5858 0%,#f09819 100%)') : 'linear-gradient(90deg,#667eea 0%,#764ba2 100%)') : undefined,
-                        borderRadius: isBadge ? '999px' : undefined,
-                        padding: is3T ? 0 : (isBadge ? '2px 12px' : undefined),
-                        boxShadow: isBadge ? '0 2px 8px 0 rgba(80,80,80,0.10)' : undefined,
-                        border: isBadge ? '1.5px solid #eee' : undefined,
-                        marginLeft: isBadge ? 8 : undefined,
-                        marginRight: is3T ? 12 : undefined,
-                        fontSize: is3T ? 16 : (isBadge ? 15 : 16),
-                        letterSpacing: isBadge ? 0.5 : undefined,
-                        transition: 'all 0.2s',
-                        textAlign: isBadge ? 'center' : (is3T ? 'center' : 'right'),
-                        display: isBadge ? 'inline-block' : (is3T ? 'inline' : 'block'),
-                        minWidth: isBadge ? 36 : undefined,
-                        maxWidth: isBadge ? 120 : undefined,
-                        whiteSpace: isBadge ? 'nowrap' : undefined,
-                        position: 'relative',
-                        zIndex: 4,
-                        textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined
-                      }}>{value}</span>
+              <span style={{
+                position: 'absolute',
+                top: 0, left: 0, right: 0, bottom: 0,
+                pointerEvents: 'none',
+                zIndex: 1,
+                opacity: 0.10,
+                backgroundImage: 'url("https://www.transparenttextures.com/patterns/squairy-light.png")',
+                mixBlendMode: 'screen',
+              }} />
+              {/* Header: Tên, Status (bỏ Rank) */}
+              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12, zIndex:2}}>
+                <div style={{fontWeight:800, fontSize:22, color:'#4b3ca7', letterSpacing:0.5}}>{row['Full name']}</div>
+                <div style={{fontWeight:700, fontSize:15, color:'#fff', background:row['Status']==='Active'?'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)':'linear-gradient(90deg,#ff5858 0%,#f09819 100%)', borderRadius:12, padding:'4px 14px', boxShadow:'0 2px 8px 0 rgba(80,80,80,0.10)'}}>{row['Status']}</div>
+              </div>
+              {/* Divider */}
+              <div style={{height:2, width:'100%', background:'linear-gradient(90deg,#b0e0ff 0%,#e3e6ef 100%)', opacity:0.5, margin:'8px 0 16px 0', borderRadius:2}} />
+              {/* Main stats: TP, Điểm trung bình chuyên môn, Technical, Trial, Sư phạm */}
+              <div style={{display:'flex', flexDirection: isMobile ? 'column' : 'column', gap:0, marginBottom:12, zIndex:2}}>
+                {/* Nếu mobile: hiển thị từng chỉ số theo dạng dọc, còn lại giữ ngang */}
+                {isMobile ? (
+                  <div style={{display:'flex', flexDirection:'column', gap:10}}>
+                    <div style={{display:'flex', alignItems:'center', gap:10}}>
+                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>TP</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['TP']}</div>
+                      </div>
                     </div>
-                  );
-                });
-                // Insert 'Mức Handle' field right after 'Role'
-                const rankVal = (row['Rank'] || '').toUpperCase();
-                const mucHandleValue = handleByRank[rankVal] || '';
-                fields.push(
-                  <div key={'Mức Handle'} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 8,
-                    borderRadius: 10,
-                    padding: '8px 0',
-                    fontSize: 16,
-                    margin: '0 0 2px 0',
-                    position: 'relative',
-                    zIndex: 3
-                  }}>
-                    <span style={{
-                      minWidth: 120,
-                      color: '#333',
-                      fontWeight: 700,
-                      letterSpacing: 0.2,
-                      textAlign: 'left',
-                      flex: 1
-                    }}>{'Mức Handle'}:</span>
-                    <span style={{
-                      color: '#222',
-                      fontWeight: 500,
-                      fontSize: 16,
-                      textAlign: 'right',
-                      display: 'block',
-                      position: 'relative',
-                      zIndex: 4
-                    }}>{mucHandleValue}</span>
+                    <div style={{display:'flex', alignItems:'center', gap:10}}>
+                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>Điểm chuyên môn</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Điểm trung bình chuyên môn']}</div>
+                      </div>
+                    </div>
+                    <div style={{display:'flex', alignItems:'center', gap:10}}>
+                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>Technical</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Technical']}</div>
+                      </div>
+                    </div>
+                    <div style={{display:'flex', alignItems:'center', gap:10}}>
+                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>Trial</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Trial']}</div>
+                      </div>
+                    </div>
+                    <div style={{display:'flex', alignItems:'center', gap:10}}>
+                      <div style={{fontWeight:700, fontSize:15, color:'#4b3ca7', minWidth:110}}>Sư phạm</div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 14px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Sư phạm']}</div>
+                      </div>
+                    </div>
                   </div>
-                );
-                // Render the rest of the fields (excluding 'Mức Handle')
-                afterRole.forEach(colKey => {
-                  const col = colKeyMap[colKey];
-                  let value = row[col];
-                  if (col === 'Mã LMS' && !value && row['Code']) value = row['Code'];
-                  const is3T = value && typeof value === 'string' && value.trim() === '3T' && highlightCols.includes(col);
-                  const isBadge = col === 'Status' || col === 'Role';
-                  fields.push(
-                    <div key={colKey} style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 8,
-                      background: is3T ? 'linear-gradient(90deg,#ff5858 0%,#ffb347 100%)' : undefined,
-                      border: is3T ? '3px solid #d00' : undefined,
-                      borderRadius: 10,
-                      padding: '8px 0',
-                      fontSize: 16,
-                      margin: '0 0 2px 0',
-                      boxShadow: undefined,
-                      position: 'relative',
-                      overflow: is3T ? 'visible' : undefined,
-                      zIndex: is3T ? 3 : undefined,
-                      width: is3T ? '105%' : undefined,
-                      marginLeft: is3T ? '-2.5%' : undefined
-                    }}>
-                      <span style={{
-                        minWidth: 120,
-                        color: is3T ? '#fff' : '#333',
-                        fontWeight: 700,
-                        letterSpacing: 0.2,
-                        textAlign: 'left',
-                        flex: 1,
-                        textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined,
-                        marginLeft: is3T ? 12 : undefined
-                      }}>{colKeyMap[colKey]}:</span>
-                      <span style={{
-                        color: is3T ? '#fff' : (isBadge ? '#fff' : '#222'),
-                        fontWeight: is3T ? 800 : (isBadge ? 700 : 500),
-                        background: isBadge ? (col === 'Status' ? (value === 'Active' ? 'linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)' : 'linear-gradient(90deg,#ff5858 0%,#f09819 100%)') : 'linear-gradient(90deg,#667eea 0%,#764ba2 100%)') : undefined,
-                        borderRadius: isBadge ? '999px' : undefined,
-                        padding: is3T ? 0 : (isBadge ? '2px 12px' : undefined),
-                        boxShadow: isBadge ? '0 2px 8px 0 rgba(80,80,80,0.10)' : undefined,
-                        border: isBadge ? '1.5px solid #eee' : undefined,
-                        marginLeft: isBadge ? 8 : undefined,
-                        marginRight: is3T ? 12 : undefined,
-                        fontSize: is3T ? 16 : (isBadge ? 15 : 16),
-                        letterSpacing: isBadge ? 0.5 : undefined,
-                        transition: 'all 0.2s',
-                        textAlign: isBadge ? 'center' : (is3T ? 'center' : 'right'),
-                        display: isBadge ? 'inline-block' : (is3T ? 'inline' : 'block'),
-                        minWidth: isBadge ? 36 : undefined,
-                        maxWidth: isBadge ? 120 : undefined,
-                        whiteSpace: isBadge ? 'nowrap' : undefined,
-                        position: 'relative',
-                        zIndex: 4,
-                        textShadow: is3T ? '0 2px 8px #d00, 0 0 2px #fff' : undefined
-                      }}>{value}</span>
+                ) : (
+                  <>
+                    {/* Tên trường trên một dòng */}
+                    <div style={{display:'flex', justifyContent:'space-between', gap:12, marginBottom:2}}>
+                      <div style={{flex:1, fontWeight:700, fontSize:15, color:'#4b3ca7', textAlign:'center'}}>TP</div>
+                      <div style={{flex:1, fontWeight:700, fontSize:15, color:'#4b3ca7', textAlign:'center'}}>Điểm chuyên môn</div>
+                      <div style={{flex:1, fontWeight:700, fontSize:15, color:'#4b3ca7', textAlign:'center'}}>Technical</div>
+                      <div style={{flex:1, fontWeight:700, fontSize:15, color:'#4b3ca7', textAlign:'center'}}>Trial</div>
+                      <div style={{flex:1, fontWeight:700, fontSize:15, color:'#4b3ca7', textAlign:'center'}}>Sư phạm</div>
                     </div>
-                  );
-                });
-                return fields;
-              })()}
+                    {/* Giá trị nằm dưới, mỗi trường trong box riêng */}
+                    <div style={{display:'flex', justifyContent:'space-between', gap:12}}>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['TP']}</div>
+                      </div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Điểm trung bình chuyên môn']}</div>
+                      </div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Technical']}</div>
+                      </div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Trial']}</div>
+                      </div>
+                      <div style={{flex:1, background:'rgba(255,255,255,0.18)', borderRadius:12, padding:'10px 8px', textAlign:'center', boxShadow:'0 2px 8px 0 #b0e0ff22'}}>
+                        <div style={{fontWeight:800, fontSize:20, color:'#222'}}>{row['Sư phạm']}</div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+              {/* Divider */}
+              <div style={{height:2, width:'100%', background:'linear-gradient(90deg,#b0e0ff 0%,#e3e6ef 100%)', opacity:0.5, margin:'8px 0 16px 0', borderRadius:2}} />
+              {/* Footer: Completion rate, Mức Handle, Đánh giá (nhỏ hơn, nằm trên 1 hàng) */}
+              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', zIndex:2, gap:6, marginTop:8}}>
+                <div style={{fontWeight:600, fontSize:13, color:'#4b3ca7', background:'rgba(255,255,255,0.13)', borderRadius:8, padding:'4px 10px', minWidth:90, textAlign:'center'}}>
+                  Completion rate: <span style={{color:'#222', fontWeight:700}}>{row['Completion rate']}</span>
+                </div>
+                <div style={{fontWeight:600, fontSize:13, color:'#4b3ca7', background:'rgba(255,255,255,0.13)', borderRadius:8, padding:'4px 10px', minWidth:90, textAlign:'center'}}>
+                  Mức Handle: <span style={{color:'#222', fontWeight:700}}>{handleByRank[row['Rank']] || ''}</span>
+                </div>
+                <div style={{fontWeight:600, fontSize:13, color:'#4b3ca7', background:'rgba(255,255,255,0.13)', borderRadius:8, padding:'4px 10px', minWidth:90, textAlign:'center'}}>
+                  Đánh giá: <span style={{color:'#222', fontWeight:700}}>{row['Đánh giá']}</span>
+                </div>
               </div>
             </div>
           );
         })
-// Thêm animation CSS vào file Table.css hoặc global
-// @keyframes sparkle {
-//   0% { filter: brightness(1); }
-//   50% { filter: brightness(1.25); }
-//   100% { filter: brightness(1); }
-// }
-// @keyframes shine {
-//   0% { background-position: -200px 0; }
-//   100% { background-position: 200px 0; }
-// }
       )}
     </div>
   );
