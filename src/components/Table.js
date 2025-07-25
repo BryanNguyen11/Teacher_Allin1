@@ -344,7 +344,7 @@ const Table = ({ data, highlightCols = [] }) => {
                 backgroundPosition: '50% 50%',
                 transition: 'background 2.2s cubic-bezier(.4,1.6,.6,1)',
                 transform: popAnim ? 'scale(1.04) translateY(-10px)' : 'scale(1) translateY(0)',
-                opacity: popAnim ? 1 : 1,
+                opacity: popAnim ? 0.98 : 0.98,
                 filter: 'blur(0.2px) brightness(1.08)',
                 animation:
                   popAnim ? 'popupCardHolo 1.1s cubic-bezier(.18,.89,.32,1.28) both' : undefined
@@ -356,7 +356,7 @@ const Table = ({ data, highlightCols = [] }) => {
               top: 0, left: 0, right: 0, bottom: 0,
               pointerEvents: 'none',
               zIndex: 1,
-              opacity: 0.18,
+              opacity: 0.10,
               backgroundImage: 'url("https://www.transparenttextures.com/patterns/squairy-light.png")',
               mixBlendMode: 'screen',
             }} />
