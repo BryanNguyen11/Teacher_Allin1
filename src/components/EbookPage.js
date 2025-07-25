@@ -31,7 +31,7 @@ const EbookPage = () => {
       setUploadError('Vui lòng nhập đủ thông tin!');
       return;
     }
-    if (password !== '191103') {
+    if (password !== 'mindx2025') {
       setUploadError('Sai mật khẩu!');
       return;
     }
@@ -122,7 +122,7 @@ function DeleteEbookButton({ ebookId, onDeleted }) {
   const [err, setErr] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const handleDelete = async () => {
-    if (pw !== '191103') {
+    if (pw !== 'mindx2025') {
       setErr('Sai mật khẩu!');
       return;
     }

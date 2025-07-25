@@ -186,10 +186,10 @@ function App() {
               accept=".csv"
               ref={fileInputRef}
               style={{display:'block'}}
-              disabled={password !== '191103'}
+              disabled={password !== 'mindx2025'}
               onChange={handleCSVUpload}
             />
-            {password !== '191103' && <span style={{color:'#b00', fontWeight:600}}>Nhập đúng mật khẩu để tải lên!</span>}
+            {password !== 'mindx2025' && <span style={{color:'#b00', fontWeight:600}}>Nhập đúng mật khẩu để tải lên!</span>}
             {uploadError && <span style={{color:'#b00', fontWeight:600}}>{uploadError}</span>}
             {uploadSuccess && <span style={{color:'#0a0', fontWeight:600}}>{uploadSuccess}</span>}
           </div>
